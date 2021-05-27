@@ -1,0 +1,13 @@
+{
+  "ftps": [
+    {
+      "name": "front-dist",
+      "host": "192.168.23.11",
+      "port": 21,
+      "username": "test",
+      "password": "whfy8888",
+      "localPath": "E:\\galensShare\\Develop\\swToolsFrontEnd\\dist\\",
+      "remotePath": "/"
+    }
+  ]
+}
