@@ -8,7 +8,7 @@ namespace DeveloperLazyTool.Functions
 {
     public abstract class FuncBase
     {
-        private Options.OptionBase _option;
+        protected Options.OptionBase Option { get; private set; }
 
         public abstract void Run();
 
@@ -18,7 +18,7 @@ namespace DeveloperLazyTool.Functions
         /// <param name="optionBase"></param>
         public virtual void SetParams(Options.OptionBase optionBase)
         {
-            _option = optionBase;
+            Option = optionBase;
         }
 
         protected T ConvertParams<T>(Options.OptionBase optionBase) where T : Options.OptionBase
@@ -33,9 +33,9 @@ namespace DeveloperLazyTool.Functions
         /// <returns></returns>
         protected T ConvertParams<T>() where T:Options.OptionBase
         {
-            if (_option == null) return null;
+            if (Option == null) return null;
 
-            return (T)_option;
+            return (T)Option;
         }
     }
 }

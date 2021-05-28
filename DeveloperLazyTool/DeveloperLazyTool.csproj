@@ -47,19 +47,30 @@
   <ItemGroup>
     <Compile Include="Functions\Fn_Config.cs" />
     <Compile Include="Functions\Fn_Ftp.cs" />
+    <Compile Include="Functions\Fn_Install.cs" />
+    <Compile Include="Functions\Fn_PipeLine.cs" />
+    <Compile Include="Functions\Fn_Uninstall.cs" />
     <Compile Include="Functions\FuncBase.cs" />
+    <Compile Include="Modules\CmdRunner.cs" />
+    <Compile Include="Modules\ScriptRunner.cs" />
     <Compile Include="Options\Opt_Config.cs" />
     <Compile Include="Options\Opt_Ftp.cs" />
     <Compile Include="Options\OptionBase.cs" />
+    <Compile Include="Options\Opt_Install.cs" />
+    <Compile Include="Options\Opt_PipeLine.cs" />
+    <Compile Include="Options\Opt_Uninstall.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Config\config.json">
+    <None Include="config\config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Config\log4net.config">
+    <None Include="config\log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="data\user_config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -86,6 +97,9 @@
       <Version>4.0.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="script\" />
+    <Folder Include="system\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

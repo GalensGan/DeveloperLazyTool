@@ -14,33 +14,91 @@ namespace DeveloperLazyTool.Options
 {
     public abstract class OptionBase
     {
-        private static JObject _jObject;
+        private static JObject _jObjUser;
         private ILog _logger = LogManager.GetLogger(typeof(OptionBase));
+
+
+        #region 配置变量
+        private JObject _jObjSystemConfig = null;
+
+        public string SystemConfigPath => "config\\config.json";
+
+        public string BaseDir { get; private set; }
+        /// <summary>
+        /// 系统 data 路径
+        /// </summary>
+        public string PathData { get; private set; }
+        /// <summary>
+        /// 系统 script 路径
+        /// </summary>
+        public string PathScript { get; private set; }
+        /// <summary>
+        /// 系统 system 路径
+        /// </summary>
+        public string PathSystem { get; private set; }
+
+        /// <summary>
+        /// 用户配置文件名称
+        /// </summary>
+        public string UserConfigName { get; set; }
+        #endregion
 
         public OptionBase()
         {
-            // 读取配置文件
-            if (_jObject == null) {
+            BaseDir = System.AppDomain.CurrentDomain.BaseDirectory;
+            // 读取系统配置文件
+            if (_jObjSystemConfig == null)
+            {
                 // 从本机读取
-                string fileFullName = $"{System.AppDomain.CurrentDomain.BaseDirectory}Config\\config.json";
+                string fileFullName = Path.Combine(BaseDir, SystemConfigPath);
 
-                _logger.Debug($"配置文件位置：{fileFullName}");
+                if (!File.Exists(fileFullName))
+                {
+                    _logger.Error("系统配置文件丢失");
+                    return;
+                }
+
+                // 读取配置文件
+                string configStr = new StreamReader(fileFullName, Encoding.Default).ReadToEnd();
+                _jObjSystemConfig = JsonConvert.DeserializeObject<JObject>(configStr);
+
+                // 加载配置文件
+                LoadPath(_jObjSystemConfig);
+            }
+
+            // 读取配置文件
+            if (_jObjUser == null) {
+                // 从本机读取
+                string fileFullName = Path.Combine(BaseDir,PathData,UserConfigName);
+
+                _logger.Debug($"用户配置文件位置：{fileFullName}");
 
                 if (!File.Exists(fileFullName)) {
 
-                    _logger.Error("配置文件不存在");
+                    _logger.Error("用户配置文件不存在");
                     return;
                 }
 
                 // 读取配置文件
                 string configStr = new StreamReader(fileFullName,Encoding.Default).ReadToEnd();
-                _jObject = JsonConvert.DeserializeObject<JObject>(configStr);
+                _jObjUser = JsonConvert.DeserializeObject<JObject>(configStr);
             }
         }
-        public JObject JObject => _jObject;
+
+        // 加载配置文件
+        private void LoadPath(JObject jObject)
+        {
+            JObject jPath = jObject.Value<JObject>("systemPath");
+            PathData = jPath["data"].ToString();
+            PathScript = jPath["script"].ToString();
+            PathSystem = jPath["system"].ToString();
+            UserConfigName = jPath["userConfigName"].ToString();
+        }
+
+        public JObject JObject => _jObjUser;
         protected virtual bool BeforeCommand() {
             // 检查配置文件
-            if (_jObject == null) {
+            if (_jObjUser == null) {
                 // 提示有问题
                 _logger.Error("未读取到配置文件");
                 return false;
