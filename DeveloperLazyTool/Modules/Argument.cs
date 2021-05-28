@@ -33,11 +33,6 @@ namespace DeveloperLazyTool.Modules
             string configStr = new StreamReader(fileFullName, Encoding.Default).ReadToEnd();
             JObject jObjUser = JsonConvert.DeserializeObject<JObject>(configStr);
 
-            if (!option.InitRuningArgs(jObjUser))
-            {
-                _logger.Error("初始化运行参数错误");
-                return null;
-            }
 
             return jObjUser;
         }

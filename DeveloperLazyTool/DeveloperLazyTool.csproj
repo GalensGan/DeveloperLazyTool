@@ -48,17 +48,21 @@
     <Compile Include="Functions\Fn_Config.cs" />
     <Compile Include="Functions\Fn_Ftp.cs" />
     <Compile Include="Functions\Fn_Install.cs" />
-    <Compile Include="Functions\Fn_PipeLine.cs" />
+    <Compile Include="Functions\Fn_Aggregate.cs" />
     <Compile Include="Functions\Fn_Uninstall.cs" />
+    <Compile Include="Functions\Fn_Zip.cs" />
     <Compile Include="Functions\FuncBase.cs" />
+    <Compile Include="Modules\Argument.cs" />
     <Compile Include="Modules\CmdRunner.cs" />
     <Compile Include="Modules\ScriptRunner.cs" />
+    <Compile Include="Options\IArgument.cs" />
     <Compile Include="Options\Opt_Config.cs" />
     <Compile Include="Options\Opt_Ftp.cs" />
     <Compile Include="Options\OptionBase.cs" />
     <Compile Include="Options\Opt_Install.cs" />
-    <Compile Include="Options\Opt_PipeLine.cs" />
+    <Compile Include="Options\Opt_Aggregate.cs" />
     <Compile Include="Options\Opt_Uninstall.cs" />
+    <Compile Include="Options\Opt_Zip.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

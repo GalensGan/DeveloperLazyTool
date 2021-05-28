@@ -10,10 +10,9 @@ namespace DeveloperLazyTool.Options
     /// <summary>
     /// 可以将多个操作放在一个管道内，这样实现连续多个操作
     /// </summary>
-    [Verb("pipeline", HelpText = "运行自定义管理")]
-    class Opt_PipeLine:OptionBase
+    [Verb("aggregate", HelpText = "聚合多步操作")]
+    class Opt_Aggregate:OptionBase
     {
-
         [Option('n',HelpText = "定义的管理名称", Required = true)]
         public string Name { get; set; }
     }
