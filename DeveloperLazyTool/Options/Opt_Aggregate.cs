@@ -14,7 +14,7 @@ namespace DeveloperLazyTool.Options
     class Opt_PipeLine:OptionBase
     {
 
-        [Option(HelpText = "定义的管理名称", Required = true)]
+        [Option('n',HelpText = "定义的管理名称", Required = true)]
         public string Name { get; set; }
     }
 }

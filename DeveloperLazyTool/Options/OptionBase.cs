@@ -12,11 +12,9 @@ using System.Threading.Tasks;
 
 namespace DeveloperLazyTool.Options
 {
-    public abstract class OptionBase
+    public abstract class OptionBase : IArgument
     {
-        private static JObject _jObjUser;
         private ILog _logger = LogManager.GetLogger(typeof(OptionBase));
-
 
         #region 配置变量
         private JObject _jObjSystemConfig = null;
@@ -46,6 +44,7 @@ namespace DeveloperLazyTool.Options
         public OptionBase()
         {
             BaseDir = System.AppDomain.CurrentDomain.BaseDirectory;
+
             // 读取系统配置文件
             if (_jObjSystemConfig == null)
             {
@@ -65,24 +64,6 @@ namespace DeveloperLazyTool.Options
                 // 加载配置文件
                 LoadPath(_jObjSystemConfig);
             }
-
-            // 读取配置文件
-            if (_jObjUser == null) {
-                // 从本机读取
-                string fileFullName = Path.Combine(BaseDir,PathData,UserConfigName);
-
-                _logger.Debug($"用户配置文件位置：{fileFullName}");
-
-                if (!File.Exists(fileFullName)) {
-
-                    _logger.Error("用户配置文件不存在");
-                    return;
-                }
-
-                // 读取配置文件
-                string configStr = new StreamReader(fileFullName,Encoding.Default).ReadToEnd();
-                _jObjUser = JsonConvert.DeserializeObject<JObject>(configStr);
-            }
         }
 
         // 加载配置文件
@@ -95,10 +76,10 @@ namespace DeveloperLazyTool.Options
             UserConfigName = jPath["userConfigName"].ToString();
         }
 
-        public JObject JObject => _jObjUser;
-        protected virtual bool BeforeCommand() {
+        private JObject _jObject = null;
+        protected virtual bool BeforeFunction() {
             // 检查配置文件
-            if (_jObjUser == null) {
+            if (_jObject == null) {
                 // 提示有问题
                 _logger.Error("未读取到配置文件");
                 return false;
@@ -107,7 +88,7 @@ namespace DeveloperLazyTool.Options
             return true;
         }
 
-        protected virtual void RunningCommand()
+        protected virtual void StartFunction()
         {
             // 用反射解耦
             string subClassName = this.GetType().Name;
@@ -129,13 +110,24 @@ namespace DeveloperLazyTool.Options
             funcBase.SetParams(this);
             funcBase.Run();
         }
-        protected virtual void AfterCommand() { }
-        public void RunCommand() {
-            if (!BeforeCommand()) return;
+        protected virtual void AfterFunction() { }
+        public void RunFunction() {
+            if (!BeforeFunction()) return;
 
-            RunningCommand();
+            StartFunction();
 
-            AfterCommand();
+            AfterFunction();
+        }
+
+        /// <summary>
+        /// 重载时，须在开始时调用
+        /// </summary>
+        /// <param name="jObject"></param>
+        /// <returns></returns>
+        public virtual bool InitRuningArgs(JObject jObject)
+        {
+            _jObject = jObject;
+            return true;
         }
     }
 }

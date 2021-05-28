@@ -30,6 +30,26 @@ namespace DeveloperLazyTool.Functions
 
         public override void Run()
         {
+            // 是否要提示
+            if (!_option.Quiet)
+            {
+                string message = null;
+                if (string.IsNullOrEmpty(_option.Name)) {
+                    message = "是否运行所有 Ftp 配置(Y/N)?";
+                }
+                else
+                {
+                    message = $"是否运行 Ftp 配置 {_option.Name}(Y/N)?";
+                }
+                Console.WriteLine(message);
+                string command = Console.ReadLine();
+                if(string.IsNullOrEmpty(command) || command.ToLower() != "y")
+                {
+                    _logger.Warn("取消上传");
+                    return;
+                }
+            }
+
             // 调用 ftp 上传
             JArray jArray = _option.JObject.Value<JArray>("ftps");
 
@@ -89,57 +109,65 @@ namespace DeveloperLazyTool.Functions
 
             _logger.Info($"开始上传 {name} 任务");
 
-            using ProgressBar progressBar = new ProgressBar(1000, $"开始上传 ftp {name}", _options);
-            _progressBar = progressBar;
-            _lastPercent = 0;
-
-            // 判断数据
-            if (string.IsNullOrEmpty(host))
+            using (ProgressBar progressBar = new ProgressBar(1000, $"开始上传 ftp {name}", _options))
             {
-                _logger.Info($"ftps{name}配置中 host 为空");
-                return;
+                _progressBar = progressBar;
+                _lastPercent = 0;
+
+                // 判断数据
+                if (string.IsNullOrEmpty(host))
+                {
+                    _logger.Info($"ftps{name}配置中 host 为空");
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(localPath))
+                {
+                    _logger.Info($"ftps{localPath}配置中 host 为空");
+                    return;
+                }
+
+                if (!File.Exists(localPath))
+                {
+                    _logger.Info($"路径 {localPath} 不存在");
+                    return;
+                }
+
+                if (port == 0) port = 21;
+
+
+                // create an FTP client
+                using FtpClient client = new FtpClient(host)
+                {
+                    RetryAttempts = 3,
+                    // specify the login credentials, unless you want to use the "anonymous" user account
+                    Credentials = new NetworkCredential(username, password),
+                    Port = port,
+                    Encoding = Encoding.UTF8,
+                };
+
+                // begin connecting to the server
+                client.Connect();
+
+                // 开启 utf8 编码
+                FtpReply ftpReply = client.Execute("OPTS UTF8 ON");
+                if (!ftpReply.Code.Equals("200") && !ftpReply.Code.Equals("202"))
+                    client.Encoding = Encoding.GetEncoding("ISO-8859-1");
+
+                // 判断是否是文件
+                if (File.Exists(localPath))
+                {
+                    // 上传文件
+                    client.UploadFile(localPath, remotePath, FtpRemoteExists.Overwrite, progress: UploadProgress);
+                }
+                else
+                {
+                    client.UploadDirectory(localPath, remotePath, FtpFolderSyncMode.Update, FtpRemoteExists.Overwrite, progress: UploadProgress);
+                }
+
+                _progressBar.AsProgress<double>().Report(1);
+                _progressBar = null;
             }
-
-            if (string.IsNullOrEmpty(localPath))
-            {
-                _logger.Info($"ftps{localPath}配置中 host 为空");
-                return;
-            }
-
-            if (port == 0) port = 21;
-
-
-            // create an FTP client
-            using FtpClient client = new FtpClient(host)
-            {
-                RetryAttempts = 3,
-                // specify the login credentials, unless you want to use the "anonymous" user account
-                Credentials = new NetworkCredential(username, password),
-                Port = port,
-                Encoding = Encoding.UTF8,
-            };
-
-            // begin connecting to the server
-            client.Connect();
-
-            // 开启 utf8 编码
-            FtpReply ftpReply = client.Execute("OPTS UTF8 ON");
-            if (!ftpReply.Code.Equals("200") && !ftpReply.Code.Equals("202"))
-                client.Encoding = Encoding.GetEncoding("ISO-8859-1");
-
-            // 判断是否是文件
-            if (File.Exists(localPath))
-            {
-                // 上传文件
-                client.UploadFile(localPath, remotePath, FtpRemoteExists.Overwrite, progress: UploadProgress);
-            }
-            else
-            {
-                client.UploadDirectory(localPath, remotePath, FtpFolderSyncMode.Update, FtpRemoteExists.Overwrite, progress: UploadProgress);
-            }
-
-            _progressBar.AsProgress<double>().Report(1);
-            _progressBar = null;
 
             _logger.Info("上传完成");
         }

@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using DeveloperLazyTool.Options;
+using DeveloperLazyTool.Modules;
 
 namespace DeveloperLazyTool
 {
@@ -39,7 +40,12 @@ namespace DeveloperLazyTool
         {
             if (obj is OptionBase options)
             {
-                options.RunCommand();
+                // 注入配置文件
+                Argument arg = new Argument();
+                options.InitRuningArgs(arg.ReadUserConfig(options.BaseDir,options.PathData,options.UserConfigName));
+
+                // 运行命令
+                options.RunFunction();
             }
         }
 

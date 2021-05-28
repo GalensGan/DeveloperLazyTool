@@ -2,12 +2,52 @@
   "ftps": [
     {
       "name": "front-dist",
-      "host": "192.168.23.11",
+      "host": "192.168.1.1",
       "port": 21,
       "username": "test",
-      "password": "whfy8888",
+      "password": "test123456",
       "localPath": "E:\\galensShare\\Develop\\swToolsFrontEnd\\dist\\",
       "remotePath": "/"
+    }
+  ],
+
+  "zips": [
+    {
+      "name": "dtl",
+      "localPath": "",
+      "targetPath": ""
+    }
+  ],
+
+  "aggregations": [
+    {
+      "name": "update-dlt",
+      "pipeline": [
+        {
+          "$zip": {
+            "localPath": "",
+            "targetPath": ""
+          }
+        },
+        {
+          "$ftp": {
+            "name": "front-dist",
+            "host": "192.168.1.1",
+            "port": 21,
+            "username": "test",
+            "password": "test123456",
+            "localPath": "$targetPath",
+            "remotePath": "/"
+          }
+        },
+        // ¸üÐÂgit
+        {
+          "$process": {
+            "name": "",
+            "arguments": ""
+          }
+        }
+      ]
     }
   ]
 }
