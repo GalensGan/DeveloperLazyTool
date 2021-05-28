@@ -338,6 +338,3 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
-
-# 忽略迁移备份
-MigrationBackup
