@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using DeveloperLazyTool.Functions;
+using DeveloperLazyTool.Modules;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -76,12 +77,12 @@ namespace DeveloperLazyTool.Options
             UserConfigName = jPath["userConfigName"].ToString();
         }
 
-        private JObject _jObject = null;
+        private Argument _argument = null;
         protected virtual bool BeforeFunction() {
             // 检查配置文件
-            if (_jObject == null) {
+            if (_argument == null) {
                 // 提示有问题
-                _logger.Error("未读取到配置文件");
+                _logger.Error("未检测到执行参数");
                 return false;
             }
 
@@ -112,6 +113,8 @@ namespace DeveloperLazyTool.Options
         }
         protected virtual void AfterFunction() { }
         public void RunFunction() {
+            // 先解析参数
+
             if (!BeforeFunction()) return;
 
             StartFunction();
@@ -124,10 +127,16 @@ namespace DeveloperLazyTool.Options
         /// </summary>
         /// <param name="jObject"></param>
         /// <returns></returns>
-        public virtual bool InitRuningArgs(JObject jObject)
+        public virtual bool InitRuningArgs(Argument argument)
         {
-            _jObject = jObject;
+            _argument = argument;
             return true;
+        }
+
+        protected ArgumentFactory ArgumentFactory { get; private set; }
+        public void SetArgumentFactory(ArgumentFactory factory)
+        {
+            ArgumentFactory = factory;
         }
     }
 }

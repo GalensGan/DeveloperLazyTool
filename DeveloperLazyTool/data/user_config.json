@@ -1,7 +1,7 @@
-{
+ï»¿{
   "ftps": [
     {
-      "name": "front-dist",
+      "name": "dist",
       "host": "192.168.1.1",
       "port": 21,
       "username": "test",
@@ -40,7 +40,7 @@
             "remotePath": "/"
           }
         },
-        // ¸üÐÂgit
+        // æ›´æ–°git
         {
           "$process": {
             "name": "",

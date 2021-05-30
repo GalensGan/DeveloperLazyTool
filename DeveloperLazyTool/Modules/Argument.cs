@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace DeveloperLazyTool.Modules
@@ -14,27 +15,120 @@ namespace DeveloperLazyTool.Modules
     {
         private ILog _logger = LogManager.GetLogger(typeof(Argument));
 
-        public JObject ReadUserConfig(string baseDir,string pathData,string userConfigName)
+        private string _name = string.Empty;
+
+        private JObject _jObject = null;
+
+        public Argument(string argumentNamem, JObject jObject)
         {
-            // 读取用户配置文件
-            // 从本机读取
-            string fileFullName = Path.Combine(baseDir,pathData,userConfigName);
+            _name = argumentNamem;
+            _jObject = jObject;
+        }
 
-            _logger.Debug($"用户配置文件位置：{fileFullName}");
+        /// <summary>
+        /// 前一个操作的结果
+        /// </summary>
+        public Argument Previous { get; set; }
 
-            if (!File.Exists(fileFullName))
+        /// <summary>
+        /// 下一个操作的结果
+        /// </summary>
+        public Argument Next { get; set; }
+
+        #region 获取参数值
+        public Tuple<bool, T> GetValue<T>(string fieldName)
+        {
+            // 如果不是以 $ 开头，说明语法不正确
+            if (!fieldName.StartsWith("$"))
             {
-
-                _logger.Error("用户配置文件不存在");
-                return null;
+                throw new ArgumentException("参数应以$开头");
             }
 
-            // 读取配置文件
-            string configStr = new StreamReader(fileFullName, Encoding.Default).ReadToEnd();
-            JObject jObjUser = JsonConvert.DeserializeObject<JObject>(configStr);
+            // 判断是否有限定名称,正则判断
+            Regex regex = new Regex(@"^\&[a-zA-Z_]+.");
+            if (regex.IsMatch(fieldName))
+            {
+                // 匹配之后，说明找特定的字段
+                string[] names = fieldName.Split('.');
+                string argName = names[0].Replace("$", "");
+                string fieldNameTemp = names[1];
 
-
-            return jObjUser;
+                return GetValue<T>(argName, fieldNameTemp);
+            }
+            else
+            {
+                string fieldNameTemp = fieldName.Replace("$", "");
+                return GetValue<T>(fieldNameTemp);
+            }
         }
+
+        public Tuple<bool, T> GetValue<T>(string argName, string fieldName)
+        {
+            if (string.IsNullOrEmpty(argName) || string.IsNullOrEmpty(fieldName))
+            {
+                throw new ArgumentException("参数为空");
+            }
+
+            if (argName == _name)
+            {
+                return QueryField<T>(fieldName);
+            }
+
+            // 向上查找
+            if (Previous != null)
+            {
+                return Previous.GetValue<T>(argName, fieldName);
+            }
+
+            return new Tuple<bool, T>(false, default);
+        }
+
+        /// <summary>
+        /// 查找字段，该字段不包含 $
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="fieldName"></param>
+        /// <returns></returns>
+        private Tuple<bool, T> QueryField<T>(string fieldName)
+        {
+            if (_jObject == null) return new Tuple<bool, T>(false, default);
+
+            if (!_jObject.ContainsKey(fieldName)) return new Tuple<bool, T>(false, default); 
+
+            var value = _jObject.Value<T>(fieldName);
+            return new Tuple<bool, T>(true, value);
+        }
+
+        #endregion
+
+        #region 设置参数
+        /// <summary>
+        /// 添加字段。只能在当前的 argument 中添加
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="fieldName"></param>
+        /// <param name="fieldValue"></param>
+        /// <returns>true 代表新增，false 代表存在，但是更新了值</returns>
+        public bool AddField<T>(string fieldName,T fieldValue)
+        {
+            // 如果为空，则初始化 jobject
+            if (_jObject == null) _jObject = new JObject();
+
+            // 添加的字段前面都前缀两个下划线 __
+            string fieldNameTemp = "__" + fieldName;
+
+            // 判断是否重复，如果重复了，就更新，但是返回false
+            if (_jObject.ContainsKey(fieldNameTemp)) {
+                // 代表重复了，直接更新值
+                _jObject.Remove(fieldNameTemp);
+                _jObject.Add(new JProperty(fieldName, fieldValue));
+
+                return false;
+            }
+
+            _jObject.Add(new JProperty(fieldNameTemp, fieldValue));
+            return true;
+        }
+        #endregion
     }
 }

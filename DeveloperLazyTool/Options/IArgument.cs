@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using DeveloperLazyTool.Modules;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,6 @@ namespace DeveloperLazyTool.Options
 {
     public interface IArgument
     {
-       bool InitRuningArgs(JObject jObject);
+       bool InitRuningArgs(Argument argument);
     }
 }
