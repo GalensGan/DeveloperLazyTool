@@ -17,12 +17,19 @@ namespace DeveloperLazyTool.Modules
 
         private string _name = string.Empty;
 
-        private JObject _jObject = null;
+        private JObject _result = null;
+
+        public JArray InputData { get; private set; }
+
+        public Argument(JArray inputData)
+        {
+            InputData = inputData;
+        }
 
         public Argument(string argumentNamem, JObject jObject)
         {
             _name = argumentNamem;
-            _jObject = jObject;
+            _result = jObject;
         }
 
         /// <summary>
@@ -35,6 +42,42 @@ namespace DeveloperLazyTool.Modules
         /// </summary>
         public Argument Next { get; set; }
 
+        private Argument _currenNextBase = null;
+        private Argument _currenPreviousBase = null;
+        /// <summary>
+        /// 添加
+        /// </summary>
+        /// <param name="argument"></param>
+        public bool AddPrevious(Argument argument)
+        {
+            if (argument == null) return false;
+
+            if (_currenPreviousBase == null) _currenPreviousBase = this;
+            _currenPreviousBase.Previous = argument;
+            _currenPreviousBase = argument;
+
+            return true;
+        }
+        public bool AddNext(Argument argument)
+        {
+            if (argument == null) return false;
+
+            if (_currenNextBase == null) _currenNextBase = this;
+            // 添加下一个参数
+            _currenNextBase.Next = argument;
+            _currenNextBase = argument;
+
+            return true;
+        }
+
+        public Argument Last
+        {
+            get
+            {
+                if (_currenNextBase == null) return this;
+                else return _currenNextBase;
+            }
+        }
         #region 获取参数值
         public Tuple<bool, T> GetValue<T>(string fieldName)
         {
@@ -91,11 +134,11 @@ namespace DeveloperLazyTool.Modules
         /// <returns></returns>
         private Tuple<bool, T> QueryField<T>(string fieldName)
         {
-            if (_jObject == null) return new Tuple<bool, T>(false, default);
+            if (_result == null) return new Tuple<bool, T>(false, default);
 
-            if (!_jObject.ContainsKey(fieldName)) return new Tuple<bool, T>(false, default); 
+            if (!_result.ContainsKey(fieldName)) return new Tuple<bool, T>(false, default);
 
-            var value = _jObject.Value<T>(fieldName);
+            var value = _result.Value<T>(fieldName);
             return new Tuple<bool, T>(true, value);
         }
 
@@ -104,29 +147,31 @@ namespace DeveloperLazyTool.Modules
         #region 设置参数
         /// <summary>
         /// 添加字段。只能在当前的 argument 中添加
+        /// 添加字段之前，要调用 InitResult
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="fieldName"></param>
         /// <param name="fieldValue"></param>
         /// <returns>true 代表新增，false 代表存在，但是更新了值</returns>
-        public bool AddField<T>(string fieldName,T fieldValue)
+        public bool AddField<T>(string fieldName, T fieldValue)
         {
             // 如果为空，则初始化 jobject
-            if (_jObject == null) _jObject = new JObject();
+            if (_result == null) _result = new JObject();
 
             // 添加的字段前面都前缀两个下划线 __
             string fieldNameTemp = "__" + fieldName;
 
             // 判断是否重复，如果重复了，就更新，但是返回false
-            if (_jObject.ContainsKey(fieldNameTemp)) {
+            if (_result.ContainsKey(fieldNameTemp))
+            {
                 // 代表重复了，直接更新值
-                _jObject.Remove(fieldNameTemp);
-                _jObject.Add(new JProperty(fieldName, fieldValue));
+                _result.Remove(fieldNameTemp);
+                _result.Add(new JProperty(fieldName, fieldValue));
 
                 return false;
             }
 
-            _jObject.Add(new JProperty(fieldNameTemp, fieldValue));
+            _result.Add(new JProperty(fieldNameTemp, fieldValue));
             return true;
         }
         #endregion

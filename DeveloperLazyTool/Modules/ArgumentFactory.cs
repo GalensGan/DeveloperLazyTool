@@ -14,11 +14,11 @@ namespace DeveloperLazyTool.Modules
     /// <summary>
     /// 参数的工厂，可以从这儿获取生成一些参数
     /// </summary>
-   public  class ArgumentFactory
+    public class ArgumentFactory
     {
         private readonly ILog _logger = LogManager.GetLogger(typeof(ArgumentFactory));
 
-        private JObject _jObjUser = null;
+        private JObject JObjUser { get; set; }
 
         public ArgumentFactory(string baseDir, string pathData, string userConfigName)
         {
@@ -40,36 +40,27 @@ namespace DeveloperLazyTool.Modules
             JObject jObjUser = JsonConvert.DeserializeObject<JObject>(configStr);
 
 
-            _jObjUser = jObjUser;
+            JObjUser = jObjUser;
+        }
+
+        public Argument GetNamedArguments(string name)
+        {
+            if (JObjUser.ContainsKey(name))
+            {
+                JArray array = JObjUser.Value<JArray>(name);
+                return new Argument(array);
+            }
+
+            return default;
         }
 
         /// <summary>
         /// 获取Ftp参数
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Argument> GetFtpArguments()
+        public Argument GetFtpArguments()
         {
-            if (_jObjUser.ContainsKey(FieldNames.ftps.ToString()))
-            {
-                var array = _jObjUser.Value<JArray>(FieldNames.ftps.ToString());
-                IEnumerable<Argument> results = array.ToList()
-                    .Cast<JObject>()
-                    .ToList()
-                    .ConvertAll(obj =>
-                    {
-                        // 获取name
-                        string argumentName = string.Empty;
-                        if (obj.TryGetValue(FieldNames.name.ToString(), out JToken value)) {
-                            argumentName = value.ToString();
-                        }
-
-                        return new Argument(argumentName, obj);
-                    });
-
-                return results;
-            }
-
-            return default;
+            return GetNamedArguments(Enums.FieldNames.ftps.ToString());
         }
     }
 }

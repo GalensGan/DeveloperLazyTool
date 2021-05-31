@@ -46,25 +46,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\FieldNames.cs" />
+    <Compile Include="Functions\ArrayFuncBase.cs" />
     <Compile Include="Functions\Fn_Config.cs" />
     <Compile Include="Functions\Fn_Ftp.cs" />
     <Compile Include="Functions\Fn_Install.cs" />
     <Compile Include="Functions\Fn_Aggregate.cs" />
     <Compile Include="Functions\Fn_Uninstall.cs" />
-    <Compile Include="Functions\Fn_Zip.cs" />
+    <Compile Include="Functions\Fn_Bat.cs" />
     <Compile Include="Functions\FuncBase.cs" />
     <Compile Include="Modules\Argument.cs" />
     <Compile Include="Modules\ArgumentFactory.cs" />
     <Compile Include="Modules\CmdRunner.cs" />
     <Compile Include="Modules\ScriptRunner.cs" />
-    <Compile Include="Options\IArgument.cs" />
     <Compile Include="Options\Opt_Config.cs" />
     <Compile Include="Options\Opt_Ftp.cs" />
     <Compile Include="Options\OptionBase.cs" />
     <Compile Include="Options\Opt_Install.cs" />
     <Compile Include="Options\Opt_Aggregate.cs" />
     <Compile Include="Options\Opt_Uninstall.cs" />
-    <Compile Include="Options\Opt_Zip.cs" />
+    <Compile Include="Options\Opt_Bat.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -77,6 +77,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="data\user_config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="script\7z-dlt.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -104,7 +107,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="script\" />
     <Folder Include="system\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

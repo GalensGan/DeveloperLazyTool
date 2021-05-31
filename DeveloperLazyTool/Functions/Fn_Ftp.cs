@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DeveloperLazyTool.Modules;
 using DeveloperLazyTool.Options;
 using FluentFTP;
 using log4net;
@@ -16,7 +17,7 @@ namespace DeveloperLazyTool.Functions
     /// <summary>
     /// 上传文件到 ftp
     /// </summary>
-    public class Fn_Ftp : FuncBase
+    public class Fn_Ftp : ArrayFuncBase
     {
         private Opt_Ftp _option;
         private ILog _logger = LogManager.GetLogger(typeof(Fn_Ftp));
@@ -28,13 +29,14 @@ namespace DeveloperLazyTool.Functions
             _option = ConvertParams<Opt_Ftp>();
         }
 
-        public override void Run()
+        protected override bool BeforeRuning()
         {
             // 是否要提示
             if (!_option.Quiet)
             {
                 string message = null;
-                if (string.IsNullOrEmpty(_option.Name)) {
+                if (string.IsNullOrEmpty(_option.Name))
+                {
                     message = "是否运行所有 Ftp 配置(Y/N)?";
                 }
                 else
@@ -43,42 +45,19 @@ namespace DeveloperLazyTool.Functions
                 }
                 Console.WriteLine(message);
                 string command = Console.ReadLine();
-                if(string.IsNullOrEmpty(command) || command.ToLower() != "y")
+                if (string.IsNullOrEmpty(command) || command.ToLower() != "y")
                 {
                     _logger.Warn("取消上传");
-                    return;
+                    return false;
                 }
             }
 
-            // 调用 ftp 上传
-            JArray jArray = _option.JObject.Value<JArray>("ftps");
+            return true;
+        }
 
-            if (jArray == null || jArray.Count < 1)
-            {
-                _logger.Info("ftps 配置为空");
-                return;
-            }
-
-            // 如果传入了 name,则执行特定的项
-            if (string.IsNullOrEmpty(_option.Name))
-            {
-                // 调用上传模块
-                jArray.ToList().ForEach(jt =>
-                {
-                    FtpUpload(jt);
-
-                });
-
-            }
-            else
-            {
-                // 找到指定name的配置
-                var jtoken = jArray.ToList().Find(jt => jt.Value<string>("name") == _option.Name);
-                if (jtoken != null)
-                {
-                    FtpUpload(jtoken);
-                }
-            }
+        protected override string GetRuningName()
+        {
+            return _option.Name;
         }
 
         private ProgressBarOptions _options = new ProgressBarOptions
@@ -95,9 +74,8 @@ namespace DeveloperLazyTool.Functions
 
         private ProgressBar _progressBar = null;
 
-        private void FtpUpload(JToken jt)
+        protected override Argument RunOne(JToken jt)
         {
-
             // 获取数据
             string name = jt.Value<string>("name");
             string host = jt.Value<string>("host");
@@ -118,19 +96,19 @@ namespace DeveloperLazyTool.Functions
                 if (string.IsNullOrEmpty(host))
                 {
                     _logger.Info($"ftps{name}配置中 host 为空");
-                    return;
+                    return null;
                 }
 
                 if (string.IsNullOrEmpty(localPath))
                 {
                     _logger.Info($"ftps{localPath}配置中 host 为空");
-                    return;
+                    return null;
                 }
 
-                if (!File.Exists(localPath))
+                if (!File.Exists(localPath) && !Directory.Exists(localPath))
                 {
                     _logger.Info($"路径 {localPath} 不存在");
-                    return;
+                    return null;
                 }
 
                 if (port == 0) port = 21;
@@ -168,8 +146,11 @@ namespace DeveloperLazyTool.Functions
                 _progressBar.AsProgress<double>().Report(1);
                 _progressBar = null;
             }
-
             _logger.Info("上传完成");
+
+            // 修改参数
+            Argument argument = new Argument($"{Enums.FieldNames.ftp}_{name}", jt as JObject);
+            return argument;
         }
 
         private double _lastPercent = 0;

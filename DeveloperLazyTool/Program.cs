@@ -17,9 +17,10 @@ namespace DeveloperLazyTool
         {
             //System.Windows.Forms.MessageBox.Show(string.Join(",", args));
 
-            // args = new string[] { "ftp","--name","front-dist" };
+            // args = new string[] { "ftp","-n","dist" };
             // args = new string[] { "config","u"};
             // args = new string[] { "uninstall"};
+            // args = new string[] { "bat"};
 
             var types = LoadVerbs();
 

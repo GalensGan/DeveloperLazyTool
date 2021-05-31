@@ -2,20 +2,20 @@
   "ftps": [
     {
       "name": "dist",
-      "host": "192.168.1.1",
+      "host": "192.168.23.11",
       "port": 21,
       "username": "test",
-      "password": "test123456",
+      "password": "whfy8888",
       "localPath": "E:\\galensShare\\Develop\\swToolsFrontEnd\\dist\\",
       "remotePath": "/"
     }
   ],
 
-  "zips": [
+  "bats": [
     {
-      "name": "dtl",
-      "localPath": "",
-      "targetPath": ""
+      "name": "7z-dlt",
+      "fileFullName": "E:\\galensShare\\Develop\\DeveloperLazyTool\\DeveloperLazyTool\\bin\\Debug\\script\\7z-dlt.bat",
+      "successFlag": "Everything is Ok"
     }
   ],
 
@@ -24,27 +24,21 @@
       "name": "update-dlt",
       "pipeline": [
         {
-          "$zip": {
-            "localPath": "",
-            "targetPath": ""
+          "$bat": {
+            "name": "7z-dlt",
+            "fileFullName": "E:\\galensShare\\Develop\\DeveloperLazyTool\\DeveloperLazyTool\\bin\\Debug\\script\\7z-dlt.bat",
+            "successFlag": "Everything is Ok"
           }
         },
         {
           "$ftp": {
-            "name": "front-dist",
-            "host": "192.168.1.1",
+            "name": "ftp-dlt",
+            "host": "192.168.23.11",
             "port": 21,
             "username": "test",
-            "password": "test123456",
-            "localPath": "$targetPath",
+            "password": "whfy8888",
+            "localPath": "E:\\galensShare\\Develop\\DeveloperLazyTool\\DeveloperLazyTool\\bin\\Debug\\developer-lazy-tool.7z",
             "remotePath": "/"
-          }
-        },
-        // 更新git
-        {
-          "$process": {
-            "name": "",
-            "arguments": ""
           }
         }
       ]

@@ -13,5 +13,9 @@ namespace DeveloperLazyTool.Enums
         zips,
         zip,
         name,
+        bats,
+        bat,
+        aggregates,
+        aggregate,
     }
 }

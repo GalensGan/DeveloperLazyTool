@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace DeveloperLazyTool.Options
 {
-    public abstract class OptionBase : IArgument
+    public abstract class OptionBase
     {
         private ILog _logger = LogManager.GetLogger(typeof(OptionBase));
 
@@ -77,15 +77,10 @@ namespace DeveloperLazyTool.Options
             UserConfigName = jPath["userConfigName"].ToString();
         }
 
-        private Argument _argument = null;
+        public Argument Argument { get; protected set; }
+
         protected virtual bool BeforeFunction() {
             // 检查配置文件
-            if (_argument == null) {
-                // 提示有问题
-                _logger.Error("未检测到执行参数");
-                return false;
-            }
-
             return true;
         }
 
@@ -113,7 +108,7 @@ namespace DeveloperLazyTool.Options
         }
         protected virtual void AfterFunction() { }
         public void RunFunction() {
-            // 先解析参数
+            ResolveArgumenets(_argumentFactory);
 
             if (!BeforeFunction()) return;
 
@@ -122,21 +117,13 @@ namespace DeveloperLazyTool.Options
             AfterFunction();
         }
 
-        /// <summary>
-        /// 重载时，须在开始时调用
-        /// </summary>
-        /// <param name="jObject"></param>
-        /// <returns></returns>
-        public virtual bool InitRuningArgs(Argument argument)
-        {
-            _argument = argument;
-            return true;
-        }
+        private ArgumentFactory _argumentFactory = null;
 
-        protected ArgumentFactory ArgumentFactory { get; private set; }
         public void SetArgumentFactory(ArgumentFactory factory)
         {
-            ArgumentFactory = factory;
+            _argumentFactory = factory;
         }
+
+        protected virtual void ResolveArgumenets(ArgumentFactory factory) { }
     }
 }

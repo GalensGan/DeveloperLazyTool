@@ -1,4 +1,8 @@
-﻿using System;
+﻿using DeveloperLazyTool.Modules;
+using DeveloperLazyTool.Options;
+using log4net;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,14 +13,26 @@ namespace DeveloperLazyTool.Functions
     /// <summary>
     /// 执行管道
     /// </summary>
-    class Fn_Aggregate : FuncBase
+    class Fn_Aggregate : ArrayFuncBase
     {
-        public override void Run()
-        {
-            // 找到所有操作
-            
+        private Opt_Aggregate _option;
+        private ILog _logger = LogManager.GetLogger(typeof(Fn_Aggregate));
 
-            // 根据操作来放入管道
+        public override void SetParams(OptionBase optionBase)
+        {
+            base.SetParams(optionBase);
+
+            _option = ConvertParams<Opt_Aggregate>();
+        }
+
+        protected override string GetRuningName()
+        {
+            return _option.Name;
+        }
+
+        protected override Argument RunOne(JToken jToken)
+        {
+            return null;
         }
     }
 }

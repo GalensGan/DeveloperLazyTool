@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using DeveloperLazyTool.Functions;
+using DeveloperLazyTool.Modules;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -12,21 +13,15 @@ namespace DeveloperLazyTool.Options
     [Verb("ftp", HelpText = "上传文件或者文件夹到ftp")]
     public class Opt_Ftp : OptionBase
     {
-        [Option('n',HelpText = "上传的配置名称", Required = false)]
+        [Option('n',"name",HelpText = "上传的配置名称", Required = false)]
         public string Name { get; set; }
 
-        [Option('q', HelpText = "是否提示确认，默认为 true", Default = false)]
+        [Option('q',"quiet", HelpText = "是否提示确认，默认为 true", Default = false)]
         public bool Quiet { get; set; }
 
-        public JObject JObject { get; private set; }
-
-        public override bool InitRuningArgs(JObject jObject)
+        protected override void ResolveArgumenets(ArgumentFactory factory)
         {
-            base.InitRuningArgs(jObject);
-
-            JObject = jObject;
-
-            return true;
+            Argument = factory.GetFtpArguments();
         }
     }
 }

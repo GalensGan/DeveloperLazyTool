@@ -1,4 +1,5 @@
-﻿using DeveloperLazyTool.Options;
+﻿using DeveloperLazyTool.Modules;
+using DeveloperLazyTool.Options;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace DeveloperLazyTool.Functions
 
             _option = ConvertParams<Opt_Config>();
         }
-        public override void Run()
+        public override Argument Run()
         {
             if (_option.User)
             {
@@ -34,6 +35,8 @@ namespace DeveloperLazyTool.Functions
                 string fileFullName = Path.Combine(_option.BaseDir, _option.SystemConfigPath);
                 System.Diagnostics.Process.Start(fileFullName);
             }
+
+            return null;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeveloperLazyTool.Modules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ namespace DeveloperLazyTool.Functions
     {
         protected Options.OptionBase Option { get; private set; }
 
-        public abstract void Run();
+        public abstract Argument Run();
 
         /// <summary>
         /// 重写时，必须先调用父类方法

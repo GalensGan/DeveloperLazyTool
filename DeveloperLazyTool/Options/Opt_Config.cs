@@ -11,10 +11,10 @@ namespace DeveloperLazyTool.Options
     [Verb("config", HelpText = "用默认软件打开配置文件")]
     public class Opt_Config : OptionBase
     {
-        [Option('u',HelpText = "用户配置")]
+        [Option('u',"user",HelpText = "用户配置")]
         public bool User { get; set; }
 
-        [Option('s', HelpText = "系统配置")]
+        [Option('s',"system", HelpText = "系统配置")]
         public bool System { get; set; }
     }
 }

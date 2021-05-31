@@ -11,7 +11,7 @@ namespace DeveloperLazyTool.Functions
     class Fn_Uninstall : FuncBase
     {
         private ILog _logger = LogManager.GetLogger(typeof(Fn_Ftp));
-        public override void Run()
+        public override Argument Run()
         {
             // 删除用户 path 中添加的变量
             string userPath = Environment.GetEnvironmentVariable("path", EnvironmentVariableTarget.User);
@@ -27,6 +27,8 @@ namespace DeveloperLazyTool.Functions
 
             // 判断当前命令行位置
             _logger.Info($"卸载成功！运行下列语句彻底删除：\n cd .. & rmdir /s/q \"{Option.BaseDir.Trim('\\')}\"");
+
+            return null;
         }
     }
 }
