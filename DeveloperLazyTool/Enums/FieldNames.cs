@@ -13,8 +13,8 @@ namespace DeveloperLazyTool.Enums
         zips,
         zip,
         name,
-        bats,
-        bat,
+        scripts,
+        script,
         aggregates,
         aggregate,
     }

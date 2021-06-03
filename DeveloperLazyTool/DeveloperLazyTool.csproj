@@ -51,9 +51,11 @@
     <Compile Include="Functions\Fn_Ftp.cs" />
     <Compile Include="Functions\Fn_Install.cs" />
     <Compile Include="Functions\Fn_Aggregate.cs" />
+    <Compile Include="Functions\Fn_Ssh.cs" />
     <Compile Include="Functions\Fn_Uninstall.cs" />
-    <Compile Include="Functions\Fn_Bat.cs" />
+    <Compile Include="Functions\Fn_Script.cs" />
     <Compile Include="Functions\FuncBase.cs" />
+    <Compile Include="Functions\SingleFuncBase.cs" />
     <Compile Include="Modules\Argument.cs" />
     <Compile Include="Modules\ArgumentFactory.cs" />
     <Compile Include="Modules\CmdRunner.cs" />
@@ -63,8 +65,9 @@
     <Compile Include="Options\OptionBase.cs" />
     <Compile Include="Options\Opt_Install.cs" />
     <Compile Include="Options\Opt_Aggregate.cs" />
+    <Compile Include="Options\Opt_Ssh.cs" />
     <Compile Include="Options\Opt_Uninstall.cs" />
-    <Compile Include="Options\Opt_Bat.cs" />
+    <Compile Include="Options\Opt_Script.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -79,7 +82,10 @@
     <None Include="data\user_config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="script\7z-dlt.bat">
+    <None Include="script\cd-backend.ahk">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="script\cd-my-bucket.ahk">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -98,6 +104,9 @@
     </PackageReference>
     <PackageReference Include="ShellProgressBar">
       <Version>5.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="SSH.NET">
+      <Version>2020.0.1</Version>
     </PackageReference>
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation">
       <Version>4.3.0</Version>

@@ -13,10 +13,10 @@ namespace DeveloperLazyTool.Options
     [Verb("ftp", HelpText = "上传文件或者文件夹到ftp")]
     public class Opt_Ftp : OptionBase
     {
-        [Option('n',"name",HelpText = "上传的配置名称", Required = false)]
-        public string Name { get; set; }
+        //[Value(0,HelpText = "上传的配置名称", Required = false)]
+        //public string Name { get; set; }
 
-        [Option('q',"quiet", HelpText = "是否提示确认，默认为 true", Default = false)]
+        [Option('q',"quiet", HelpText = "是否提示确认", Default = false)]
         public bool Quiet { get; set; }
 
         protected override void ResolveArgumenets(ArgumentFactory factory)

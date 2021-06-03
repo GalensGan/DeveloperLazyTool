@@ -8,25 +8,56 @@
       "password": "whfy8888",
       "localPath": "E:\\galensShare\\Develop\\swToolsFrontEnd\\dist\\",
       "remotePath": "/"
+    },
+    {
+      "name": "dlt",
+      "host": "192.168.23.11",
+      "port": 21,
+      "username": "forumUpload",
+      "password": "whfy9999",
+      "localPath": "E:/galensShare/Develop/DeveloperLazyTool/DeveloperLazyTool/bin/Release/developer-lazy-tool.7z",
+      "remotePath": "/1622163283253-developer-lazy-tool.7z"
     }
   ],
 
-  "bats": [
+  "scripts": [
     {
-      "name": "7z-dlt",
-      "fileFullName": "E:\\galensShare\\Develop\\DeveloperLazyTool\\DeveloperLazyTool\\bin\\Debug\\script\\7z-dlt.bat",
+      "name": "zip-Dlt",
+      "fileName": "7z",
+      "arguments": "a -t7z E:/galensShare/Develop/DeveloperLazyTool/DeveloperLazyTool/bin/Release/developer-lazy-tool.7z E:/galensShare/Develop/DeveloperLazyTool/DeveloperLazyTool/bin/Release/*",
       "successFlag": "Everything is Ok"
+    },
+    {
+      "name": "cd-backend",
+      "fileName": "AutoHotkey.exe",
+      "arguments": "cd-backend.ahk"
+    },
+    {
+      "name": "cd-mybucket",
+      "fileName": "AutoHotkey.exe",
+      "arguments": "cd-my-bucket.ahk"
+    }
+  ],
+
+  "sshs": [
+    {
+      "name": "back-end",
+      "host": "host",
+      "port": 22,
+      "username": "username",
+      "password": "Sw#password"
     }
   ],
 
   "aggregations": [
     {
-      "name": "update-dlt",
+      "name": "uploadDlt",
       "pipeline": [
         {
-          "$bat": {
+          "$script": {
             "name": "7z-dlt",
-            "fileFullName": "E:\\galensShare\\Develop\\DeveloperLazyTool\\DeveloperLazyTool\\bin\\Debug\\script\\7z-dlt.bat",
+            "fileFullName": "7z",
+            "arguments": "a -t7z E:/galensShare/Develop/DeveloperLazyTool/DeveloperLazyTool/bin/Release/developer-lazy-tool.7z E:/galensShare/Develop/DeveloperLazyTool/DeveloperLazyTool/bin/Release*",
             "successFlag": "Everything is Ok"
           }
         },

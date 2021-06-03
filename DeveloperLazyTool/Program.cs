@@ -15,12 +15,16 @@ namespace DeveloperLazyTool
         [STAThread]
         public static void Main(string[] args)
         {
+            // Console.WriteLine(string.Join("__", args));
             //System.Windows.Forms.MessageBox.Show(string.Join(",", args));
 
-            // args = new string[] { "ftp","-n","dist" };
+            // args = new string[] { "ftp","dlt" };
             // args = new string[] { "config","u"};
             // args = new string[] { "uninstall"};
-            // args = new string[] { "bat"};
+            // args = new string[] { "cmd","-n","ahk"};
+            // args = new string[] { "cmd","-q","true","-n","cd-backend"};
+            // args = new string[] { "cmd", "cd-backend", "-q", "true", };
+            // args = new string[] { "agg", "uploadDlt" };
 
             var types = LoadVerbs();
 

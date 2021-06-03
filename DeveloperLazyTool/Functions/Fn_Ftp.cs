@@ -37,15 +37,15 @@ namespace DeveloperLazyTool.Functions
                 string message = null;
                 if (string.IsNullOrEmpty(_option.Name))
                 {
-                    message = "是否运行所有 Ftp 配置(Y/N)?";
+                    message = "是否运行所有 Ftp 配置(Y/N，Default:Y) ?";
                 }
                 else
                 {
-                    message = $"是否运行 Ftp 配置 {_option.Name}(Y/N)?";
+                    message = $"是否运行 Ftp 配置 {_option.Name}(Y/N，Default:Y) ?";
                 }
                 Console.WriteLine(message);
                 string command = Console.ReadLine();
-                if (string.IsNullOrEmpty(command) || command.ToLower() != "y")
+                if (!string.IsNullOrEmpty(command) && command.ToLower() != "y")
                 {
                     _logger.Warn("取消上传");
                     return false;

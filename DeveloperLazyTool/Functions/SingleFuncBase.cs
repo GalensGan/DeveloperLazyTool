@@ -10,18 +10,11 @@ using System.Threading.Tasks;
 namespace DeveloperLazyTool.Functions
 {
     /// <summary>
-    /// 可以运行多个
+    /// 只能运行一个
     /// </summary>
-    public abstract class ArrayFuncBase:FuncBase
+    public abstract class SingleFuncBase : ArrayFuncBase
     {
         private ILog _logger = LogManager.GetLogger(typeof(ArrayFuncBase));
-
-        protected virtual bool BeforeRuning()
-        {
-            return true;
-        }
-
-        protected abstract string GetRuningName();
 
         public override Argument Run()
         {
@@ -42,33 +35,24 @@ namespace DeveloperLazyTool.Functions
             // 如果传入了 name,则执行特定的项
             if (string.IsNullOrEmpty(GetRuningName()))
             {
-                // 调用上传模块
-                jArray.ToList().ForEach(jt =>
-                {
-                    var argTemp = RunOne(jt);
-                    Option.Argument.AddNext(argTemp);
-                });
-
+                _logger.Info("未输入 name,将运行第一个配置");
+                // 调用第一个模块
+                var jt = jArray.ToList().FirstOrDefault();
+                var argTemp = RunOne(jt);
+                Option.Argument.AddNext(argTemp);
             }
             else
             {
                 // 找到指定name的配置
-                var jtoken = jArray.ToList().Find(jt => jt.Value<string>("name").ToLower() == GetRuningName().ToLower());
+                var jtoken = jArray.ToList().Find(jt => jt.Value<string>("name") == GetRuningName());
                 if (jtoken != null)
                 {
                     var argTemp = RunOne(jtoken);
                     Option.Argument.AddNext(argTemp);
                 }
-                else
-                {
-                    // 提示错误
-                    _logger.Error($"未找到{ GetRuningName()}的配置");
-                }
             }
 
             return Option.Argument.Last;
         }
-
-        protected abstract Argument RunOne(JToken jToken);
     }
 }

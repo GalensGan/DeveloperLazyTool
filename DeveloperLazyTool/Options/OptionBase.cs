@@ -15,6 +15,10 @@ namespace DeveloperLazyTool.Options
 {
     public abstract class OptionBase
     {
+        #region 选项
+        [Value(0, HelpText = "名称", Required = false)]
+        public virtual string Name { get; set; }
+        #endregion
         private ILog _logger = LogManager.GetLogger(typeof(OptionBase));
 
         #region 配置变量
