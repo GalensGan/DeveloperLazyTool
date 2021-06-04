@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace DeveloperLazyTool.Options
 {
-    [Verb("es", HelpText = "运行脚本文件(Execute Script)")]
-    public class Opt_Script:OptionBase
+    [Verb("es", true, HelpText = "运行脚本文件(Execute Script)")]
+    public class Opt_Script : OptionBase
     {
         //[Value(0, HelpText = "上传的配置名称",Required =false)]
         //// [Option('n', "name", HelpText = "上传的配置名称", Required = false)]        
