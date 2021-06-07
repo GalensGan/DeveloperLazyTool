@@ -35,7 +35,6 @@ namespace DeveloperLazyTool.Functions
                 string fileFullName = Path.Combine(_option.BaseDir, _option.SystemConfigPath);
                 System.Diagnostics.Process.Start(fileFullName);
             }
-
             return null;
         }
     }
