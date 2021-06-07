@@ -29,12 +29,12 @@
     },
     {
       "name": "cd-backend",
-      "fileName": "AutoHotkey.exe",
+      "fileName": "AutoHotKey.exe",
       "arguments": "cd-backend.ahk"
     },
     {
       "name": "cd-mybucket",
-      "fileName": "AutoHotkey.exe",
+      "fileName": "AutoHotKey.exe",
       "arguments": "cd-my-bucket.ahk"
     }
   ],
