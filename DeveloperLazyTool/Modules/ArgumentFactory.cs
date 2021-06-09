@@ -43,14 +43,22 @@ namespace DeveloperLazyTool.Modules
             JObjUser = jObjUser;
         }
 
+        /// <summary>
+        /// 通过名字获取参数
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public Argument GetNamedArguments(string name)
         {
             if (JObjUser.ContainsKey(name))
             {
                 JArray array = JObjUser.Value<JArray>(name);
-                return new Argument(array);
+                var result = new Argument(array)
+                {
+                    JObjUser = JObjUser
+                };
+                return result;
             }
-
             return default;
         }
 
@@ -61,6 +69,15 @@ namespace DeveloperLazyTool.Modules
         public Argument GetFtpArguments()
         {
             return GetNamedArguments(Enums.FieldNames.ftps.ToString());
+        }
+
+        public Argument GetListArguments()
+        {
+            var result = new Argument(null)
+            {
+                JObjUser = JObjUser
+            };
+            return result;
         }
     }
 }

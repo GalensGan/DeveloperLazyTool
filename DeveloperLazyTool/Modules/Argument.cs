@@ -17,9 +17,20 @@ namespace DeveloperLazyTool.Modules
 
         private string _name = string.Empty;
 
+        /// <summary>
+        /// 输出结果
+        /// </summary>
         private JObject _result = null;
 
+        /// <summary>
+        /// 当前数据
+        /// </summary>
         public JArray InputData { get; private set; }
+
+        /// <summary>
+        /// 所有数据
+        /// </summary>
+        public JObject JObjUser { get; set; }
 
         public Argument(JArray inputData)
         {
