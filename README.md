@@ -69,6 +69,8 @@ dlt uninstall
 
 - 用户配置(--user || -u)
 - 系统配置(--system || -s)
+- 打开脚本目录(--scriptdir)
+- 打开安装目录(--setupdir)
 
 ### FTP上传(ftp)
 
