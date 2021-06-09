@@ -151,5 +151,6 @@ dlt zip-Dlt
 - [x] 打开配置文件
 - [x] ftp上传 ftp
 - [x] 执行脚本 es
+- [ ] 增加环境识别
 - [ ] 聚合 aggregate
 - [ ] 更新 update 更新自己
