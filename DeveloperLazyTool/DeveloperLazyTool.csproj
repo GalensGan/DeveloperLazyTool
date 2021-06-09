@@ -55,6 +55,7 @@
     <Compile Include="Functions\Fn_Uninstall.cs" />
     <Compile Include="Functions\Fn_Script.cs" />
     <Compile Include="Functions\FuncBase.cs" />
+    <Compile Include="Functions\Func_List.cs" />
     <Compile Include="Functions\SingleFuncBase.cs" />
     <Compile Include="Modules\Argument.cs" />
     <Compile Include="Modules\ArgumentFactory.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Options\OptionBase.cs" />
     <Compile Include="Options\Opt_Install.cs" />
     <Compile Include="Options\Opt_Aggregate.cs" />
+    <Compile Include="Options\Opt_List.cs" />
     <Compile Include="Options\Opt_Ssh.cs" />
     <Compile Include="Options\Opt_Uninstall.cs" />
     <Compile Include="Options\Opt_Script.cs" />

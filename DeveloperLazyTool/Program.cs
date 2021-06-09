@@ -23,7 +23,7 @@ namespace DeveloperLazyTool
             // args = new string[] { "uninstall"};
             // args = new string[] { "cmd","-n","ahk"};
             // args = new string[] { "cmd","-q","true","-n","cd-backend"};
-            // args = new string[] { "cmd", "cd-backend", "-q", "true", };
+            // args = new string[] { "cd-backend", "-q", "true", };
             // args = new string[] { "agg", "uploadDlt" };
 
             var types = LoadVerbs();

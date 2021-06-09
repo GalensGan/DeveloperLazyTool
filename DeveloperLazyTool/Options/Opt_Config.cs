@@ -16,5 +16,11 @@ namespace DeveloperLazyTool.Options
 
         [Option('s',"system", HelpText = "系统配置")]
         public bool System { get; set; }
+
+        [Option(HelpText = "打开脚本目录")]
+        public bool ScriptDir { get; set; }
+
+        [Option(HelpText = "打开程序安装目录")]
+        public bool SetupDir { get; set; }
     }
 }

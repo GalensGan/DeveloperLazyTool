@@ -48,7 +48,6 @@ namespace DeveloperLazyTool.Functions
                     var argTemp = RunOne(jt);
                     Option.Argument.AddNext(argTemp);
                 });
-
             }
             else
             {

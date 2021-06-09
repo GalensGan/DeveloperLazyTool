@@ -38,7 +38,7 @@ namespace DeveloperLazyTool.Functions
                 WorkingDirectory = Path.Combine(Option.BaseDir,Option.PathScript),
                 FileName = fileFullName,
                 Arguments = arguments,
-                UseShellExecute = false,//是否使用操作系统shell启动
+                UseShellExecute = false,
                 RedirectStandardInput = true,//接受来自调用程序的输入信息
                 RedirectStandardOutput = true,//由调用程序获取输出信息
                 RedirectStandardError = true,//重定向标准错误输出
