@@ -1,2 +1,0 @@
-SendRaw,cd d:;cd D:/Scoop/buckets/my-bucket/;explorer .
-Send,{Enter}
