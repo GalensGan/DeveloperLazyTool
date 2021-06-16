@@ -25,6 +25,7 @@ namespace DeveloperLazyTool
             // args = new string[] { "cmd","-q","true","-n","cd-backend"};
             // args = new string[] { "cd-backend", "-q", "true", };
             // args = new string[] { "agg", "uploadDlt" };
+            // args = new string[] { "list", "ftps" };
 
             var types = LoadVerbs();
 
