@@ -81,9 +81,7 @@
     <None Include="config\log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="data\user_config.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="data\user_config.json" />
     <None Include="script\cd-backend.ahk">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

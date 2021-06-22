@@ -1,5 +1,5 @@
 ﻿{
-  "systemPath": {
+   "systemPath": {
     "data": "data", // data 目录
     "script": "script", // script 目录
     "system": "system", // 系统文件目录

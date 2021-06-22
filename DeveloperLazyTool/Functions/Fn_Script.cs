@@ -29,13 +29,13 @@ namespace DeveloperLazyTool.Functions
             // 获取bat文件路径
             string name = jToken.Value<string>("name");
             string fileFullName = jToken.Value<string>("fileName");
-            string successFlag = jToken.Value<string>("successFlag")??string.Empty;
+            string successFlag = jToken.Value<string>("successFlag") ?? string.Empty;
             string arguments = jToken.Value<string>("arguments") ?? string.Empty;
 
             Process p = new Process();
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
-                WorkingDirectory = Path.Combine(Option.BaseDir,Option.PathScript),
+                WorkingDirectory = Path.Combine(Option.BaseDir, Option.PathScript),
                 FileName = fileFullName,
                 Arguments = arguments,
                 UseShellExecute = false,
@@ -43,30 +43,56 @@ namespace DeveloperLazyTool.Functions
                 RedirectStandardOutput = true,//由调用程序获取输出信息
                 RedirectStandardError = true,//重定向标准错误输出
                 CreateNoWindow = true,//不显示程序窗口
+                StandardOutputEncoding = Encoding.Default,
+                StandardErrorEncoding = Encoding.Default
             };
             p.StartInfo = startInfo;
             p.Start();//启动程序
 
             p.StandardInput.AutoFlush = true;
 
+            p.OutputDataReceived += P_OutputDataReceived;
+            p.ErrorDataReceived += P_ErrorDataReceived;
+            p.BeginOutputReadLine();
+
             //获取cmd窗口的输出信息
-            string output = p.StandardOutput.ReadToEnd();
+            // string output = p.StandardOutput.ReadToEnd();
             //等待程序执行完退出进程
             p.WaitForExit();
             p.Close();
 
-            if (output.Contains(successFlag))
-            {
-                // 说明成功了
-                if (!_option.Quiet) _logger.Info($"运行 {Enums.FieldNames.scripts}:[{name}] 成功！");
-                return new Argument($"{Enums.FieldNames.script}_{name}", jToken as JObject);
-            }
-            else
-            {
-                if (!_option.Quiet) _logger.Error($"运行 {Enums.FieldNames.scripts}:[{name}] 失败！");
-                return null;
-            }
+            //if (output.Contains(successFlag))
+            //{
+            //    // 说明成功了
+            if (!_option.Quiet) _logger.Info($"运行 {Enums.FieldNames.scripts}:[{name}] 成功！");
+            return new Argument($"{Enums.FieldNames.script}_{name}", jToken as JObject);
+            //}
+            //else
+            //{
+            //    if (!_option.Quiet) _logger.Error($"运行 {Enums.FieldNames.scripts}:[{name}] 失败！");
+            //    return null;
+            //}
+        }
 
+        private void P_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(e.Data)) return;
+            // 转码
+            byte[] bytes = Encoding.Default.GetBytes(e.Data);
+            bytes = Encoding.Convert(Encoding.Default, Encoding.UTF8, bytes);
+            string formatString = Encoding.UTF8.GetString(bytes);
+            Console.WriteLine(formatString);
+        }
+
+        private void P_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(e.Data)) return;
+            // string test = "成功";
+            // 转码
+            byte[] bytes = Encoding.Default.GetBytes(e.Data);
+            bytes = Encoding.Convert(Encoding.Default, Encoding.UTF8, bytes);
+            string formatString = Encoding.UTF8.GetString(bytes);
+            Console.WriteLine(formatString);
         }
 
         protected override string GetRuningName()
