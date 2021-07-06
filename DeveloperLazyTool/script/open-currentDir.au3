@@ -1,0 +1,1 @@
+Send("explorer.exe . {Enter}")

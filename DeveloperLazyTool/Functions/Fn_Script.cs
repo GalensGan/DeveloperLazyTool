@@ -39,6 +39,7 @@ namespace DeveloperLazyTool.Functions
             {
                 // 添加附加的
                 string attachParams = string.Join(" ", _option.Params);
+
                 arguments += " " + attachParams;
             }
             ProcessStartInfo startInfo = new ProcessStartInfo()

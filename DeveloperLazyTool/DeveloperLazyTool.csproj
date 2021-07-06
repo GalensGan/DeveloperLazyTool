@@ -84,13 +84,7 @@
     <None Include="data\user_config.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="script\add-mac.ahk">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="script\cd-backend.ahk">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="script\cd-my-bucket.ahk">
+    <None Include="script\open-currentDir.au3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
