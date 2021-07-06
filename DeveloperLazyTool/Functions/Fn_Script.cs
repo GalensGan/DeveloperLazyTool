@@ -32,17 +32,25 @@ namespace DeveloperLazyTool.Functions
             string successFlag = jToken.Value<string>("successFlag") ?? string.Empty;
             string arguments = jToken.Value<string>("arguments") ?? string.Empty;
 
+
             Process p = new Process();
+            // 如果有附加参数，则要添加
+            if (_option.Params != null && _option.Params.Count() > 0)
+            {
+                // 添加附加的
+                string attachParams = string.Join(" ", _option.Params);
+                arguments += " " + attachParams;
+            }
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
                 WorkingDirectory = Path.Combine(Option.BaseDir, Option.PathScript),
                 FileName = fileFullName,
                 Arguments = arguments,
                 UseShellExecute = false,
-                RedirectStandardInput = true,//接受来自调用程序的输入信息
-                RedirectStandardOutput = true,//由调用程序获取输出信息
-                RedirectStandardError = true,//重定向标准错误输出
-                CreateNoWindow = true,//不显示程序窗口
+                RedirectStandardInput = true,// 接受来自调用程序的输入信息
+                RedirectStandardOutput = true,// 由调用程序获取输出信息
+                RedirectStandardError = true,// 重定向标准错误输出
+                CreateNoWindow = true,// 不显示程序窗口
                 StandardOutputEncoding = Encoding.Default,
                 StandardErrorEncoding = Encoding.Default
             };
@@ -55,11 +63,15 @@ namespace DeveloperLazyTool.Functions
             p.ErrorDataReceived += P_ErrorDataReceived;
             p.BeginOutputReadLine();
 
-            //获取cmd窗口的输出信息
-            // string output = p.StandardOutput.ReadToEnd();
-            //等待程序执行完退出进程
-            p.WaitForExit();
-            p.Close();
+            if (!_option.Background)
+            {
+                //获取cmd窗口的输出信息
+                // string output = p.StandardOutput.ReadToEnd();
+                //等待程序执行完退出进程
+                p.WaitForExit();
+                p.Close();
+            }
+
 
             //if (output.Contains(successFlag))
             //{

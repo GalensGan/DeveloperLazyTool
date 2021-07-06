@@ -108,7 +108,14 @@ namespace DeveloperLazyTool.Options
 
             FuncBase  funcBase = Activator.CreateInstance(type) as FuncBase;
             funcBase.SetParams(this);
-            funcBase.Run();
+            try
+            {
+                funcBase.Run();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
         protected virtual void AfterFunction() { }
         public void RunFunction() {

@@ -18,6 +18,12 @@ namespace DeveloperLazyTool.Options
         [Option('q', "quiet", HelpText = "是否提示确认", Default = false)]
         public bool Quiet { get; set; }
 
+        [Option('b', "background", HelpText = "是否在后台运行", Default = false)]
+        public bool Background { get; set; }
+
+        [Option('p', "params", HelpText = "动态参数")]
+        public IEnumerable<string> Params { get; set; }
+
         protected override void ResolveArgumenets(ArgumentFactory factory)
         {
             Argument = factory.GetNamedArguments(Enums.FieldNames.scripts.ToString());

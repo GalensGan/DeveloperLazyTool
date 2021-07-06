@@ -36,6 +36,11 @@
       "name": "cd-mybucket",
       "fileName": "AutoHotKey.exe",
       "arguments": "cd-my-bucket.ahk"
+    },
+    {
+      "name": "addmac",
+      "fileName": "AutoHotkey.exe",
+      "arguments": "add-mac.ahk"
     }
   ],
 
