@@ -57,8 +57,7 @@
     <Compile Include="Functions\FuncBase.cs" />
     <Compile Include="Functions\Fn_List.cs" />
     <Compile Include="Functions\SingleFuncBase.cs" />
-    <Compile Include="Modules\Argument.cs" />
-    <Compile Include="Modules\ArgumentFactory.cs" />
+    <Compile Include="Modules\StdInOut.cs" />
     <Compile Include="Modules\CmdRunner.cs" />
     <Compile Include="Modules\ScriptRunner.cs" />
     <Compile Include="Options\Opt_Config.cs" />

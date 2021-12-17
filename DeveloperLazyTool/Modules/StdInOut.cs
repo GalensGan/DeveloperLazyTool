@@ -11,83 +11,52 @@ using System.Threading.Tasks;
 
 namespace DeveloperLazyTool.Modules
 {
-    public class Argument
+    /// <summary>
+    /// 标准的输入输出
+    /// </summary>
+    public class StdInOut
     {
-        private ILog _logger = LogManager.GetLogger(typeof(Argument));
+        private ILog _logger = LogManager.GetLogger(typeof(StdInOut));
 
-        private string _name = string.Empty;
+        private string _stageName = string.Empty;
+        
 
-        /// <summary>
-        /// 输出结果
-        /// </summary>
-        private JObject _result = null;
 
         /// <summary>
-        /// 当前数据
+        /// 保存定义命令的原始数据
         /// </summary>
-        public JArray InputData { get; private set; }
+        public JObject DefinitionData { get; set; }
 
         /// <summary>
-        /// 所有数据
+        /// 保存当前命令产生的结果数据
         /// </summary>
-        public JObject JObjUser { get; set; }
-
-        public Argument(JArray inputData)
-        {
-            InputData = inputData;
-        }
-
-        public Argument(string argumentNamem, JObject jObject)
-        {
-            _name = argumentNamem;
-            _result = jObject;
-        }
+        public JObject Data { get; set; }
 
         /// <summary>
         /// 前一个操作的结果
         /// </summary>
-        public Argument Previous { get; set; }
+        public StdInOut Previous { get;private set; }
 
         /// <summary>
         /// 下一个操作的结果
         /// </summary>
-        public Argument Next { get; set; }
+        public StdInOut Next { get;private set; }
 
-        private Argument _currenNextBase = null;
-        private Argument _currenPreviousBase = null;
-        /// <summary>
-        /// 添加
-        /// </summary>
-        /// <param name="argument"></param>
-        public bool AddPrevious(Argument argument)
+        public bool AddPrevious(StdInOut pre)
         {
-            if (argument == null) return false;
+            if (pre == null) return false;
 
-            if (_currenPreviousBase == null) _currenPreviousBase = this;
-            _currenPreviousBase.Previous = argument;
-            _currenPreviousBase = argument;
+            Previous = pre;
 
             return true;
         }
-        public bool AddNext(Argument argument)
+        public bool AddNext(StdInOut next)
         {
-            if (argument == null) return false;
+            if (next == null) return false;
 
-            if (_currenNextBase == null) _currenNextBase = this;
-            // 添加下一个参数
-            _currenNextBase.Next = argument;
-            _currenNextBase = argument;
+            Next = next;
 
             return true;
-        }
-
-        public Argument Last
-        {
-            get
-            {
-                if (_currenNextBase == null) return this;
-                else return _currenNextBase;
-            }
         }
         #region 获取参数值
         public Tuple<bool, T> GetValue<T>(string fieldName)
@@ -98,7 +67,7 @@ namespace DeveloperLazyTool.Modules
                 throw new ArgumentException("参数应以$开头");
             }
 
-            // 判断是否有限定名称,正则判断
+            // 判断是否有限定名称(阶段名.字段名),正则判断
             Regex regex = new Regex(@"^\&[a-zA-Z_]+.");
             if (regex.IsMatch(fieldName))
             {
@@ -116,14 +85,14 @@ namespace DeveloperLazyTool.Modules
             }
         }
 
-        public Tuple<bool, T> GetValue<T>(string argName, string fieldName)
+        public Tuple<bool, T> GetValue<T>(string stageName, string fieldName)
         {
-            if (string.IsNullOrEmpty(argName) || string.IsNullOrEmpty(fieldName))
+            if (string.IsNullOrEmpty(stageName) || string.IsNullOrEmpty(fieldName))
             {
                 throw new ArgumentException("参数为空");
             }
 
-            if (argName == _name)
+            if (stageName == _stageName)
             {
                 return QueryField<T>(fieldName);
             }
@@ -131,7 +100,7 @@ namespace DeveloperLazyTool.Modules
             // 向上查找
             if (Previous != null)
             {
-                return Previous.GetValue<T>(argName, fieldName);
+                return Previous.GetValue<T>(stageName, fieldName);
             }
 
             return new Tuple<bool, T>(false, default);
@@ -145,11 +114,11 @@ namespace DeveloperLazyTool.Modules
         /// <returns></returns>
         private Tuple<bool, T> QueryField<T>(string fieldName)
         {
-            if (_result == null) return new Tuple<bool, T>(false, default);
+            if (Data == null) return new Tuple<bool, T>(false, default);
 
-            if (!_result.ContainsKey(fieldName)) return new Tuple<bool, T>(false, default);
+            if (!Data.ContainsKey(fieldName)) return new Tuple<bool, T>(false, default);
 
-            var value = _result.Value<T>(fieldName);
+            var value = Data.Value<T>(fieldName);
             return new Tuple<bool, T>(true, value);
         }
 

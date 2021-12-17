@@ -14,7 +14,7 @@ namespace DeveloperLazyTool.Functions
     {
         private ILog _logger = LogManager.GetLogger(typeof(Fn_Ftp));
 
-        public override Argument Run()
+        public override StdInOut Run()
         {
             // 判断名称是否为空
             if (string.IsNullOrEmpty(Option.Name))

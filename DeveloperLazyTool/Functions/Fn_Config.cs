@@ -23,7 +23,7 @@ namespace DeveloperLazyTool.Functions
 
             _option = ConvertParams<Opt_Config>();
         }
-        public override Argument Run()
+        public override StdInOut Run()
         {
             if (_option.User)
             {
