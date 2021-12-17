@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\FieldNames.cs" />
+    <Compile Include="Extensions\Ex_Json.cs" />
     <Compile Include="Functions\ArrayFuncBase.cs" />
     <Compile Include="Functions\Fn_Config.cs" />
     <Compile Include="Functions\Fn_Ftp.cs" />

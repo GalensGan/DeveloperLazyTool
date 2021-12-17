@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using DeveloperLazyTool.Enums;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -16,16 +17,27 @@ namespace DeveloperLazyTool.Modules
     /// </summary>
     public class StdInOut
     {
+        public StdInOut(JObject currentConfig,JObject allUserConfigs)
+        {
+            CurrentConfig = currentConfig;
+            AllUserConfigs = allUserConfigs;
+
+            // 获取name作为stage免
+            _stageName = currentConfig.SelectToken(FieldNames.name.ToString()).ToString();
+
+            // 新建数据储存
+            Data = new JObject();
+        }
         private ILog _logger = LogManager.GetLogger(typeof(StdInOut));
 
         private string _stageName = string.Empty;
-        
 
+        public JObject AllUserConfigs { get; private set; }
 
         /// <summary>
         /// 保存定义命令的原始数据
         /// </summary>
-        public JObject DefinitionData { get; set; }
+        public JObject CurrentConfig { get;private set; }
 
         /// <summary>
         /// 保存当前命令产生的结果数据
@@ -134,24 +146,21 @@ namespace DeveloperLazyTool.Modules
         /// <param name="fieldValue"></param>
         /// <returns>true 代表新增，false 代表存在，但是更新了值</returns>
         public bool AddField<T>(string fieldName, T fieldValue)
-        {
-            // 如果为空，则初始化 jobject
-            if (_result == null) _result = new JObject();
-
-            // 添加的字段前面都前缀两个下划线 __
+        {           
+            // 添加的字段前面都前缀两个下划线 __，避免与用户定义的字段冲突
             string fieldNameTemp = "__" + fieldName;
 
             // 判断是否重复，如果重复了，就更新，但是返回false
-            if (_result.ContainsKey(fieldNameTemp))
+            if (Data.ContainsKey(fieldNameTemp))
             {
                 // 代表重复了，直接更新值
-                _result.Remove(fieldNameTemp);
-                _result.Add(new JProperty(fieldName, fieldValue));
+                Data.Remove(fieldNameTemp);
+                Data.Add(new JProperty(fieldName, fieldValue));
 
                 return false;
             }
 
-            _result.Add(new JProperty(fieldNameTemp, fieldValue));
+            Data.Add(new JProperty(fieldNameTemp, fieldValue));
             return true;
         }
         #endregion
