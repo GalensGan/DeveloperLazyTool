@@ -28,20 +28,19 @@ namespace DeveloperLazyTool.Options
 
         public string BaseDir { get; private set; }
         /// <summary>
-        /// 系统 data 路径
+        /// 本系统 data 路径
         /// </summary>
         public string PathData { get; private set; }
         /// <summary>
-        /// 系统 script 路径
+        /// 本系统 script 路径
         /// </summary>
         public string PathScript { get; private set; }
         /// <summary>
-        /// 系统 system 路径
+        /// 本系统 system 路径
         /// </summary>
         public string PathSystem { get; private set; }
-
         /// <summary>
-        /// 用户配置文件名称
+        /// 用户配置文件的名称
         /// </summary>
         public string UserConfigName { get; set; }
         #endregion
@@ -118,6 +117,7 @@ namespace DeveloperLazyTool.Options
             }
         }
         protected virtual void AfterFunction() { }
+
         public void RunFunction() {
             ResolveArgumenets(_argumentFactory);
 
