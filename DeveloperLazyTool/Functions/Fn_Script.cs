@@ -24,7 +24,7 @@ namespace DeveloperLazyTool.Functions
             _option = ConvertParams<Opt_Script>();
         }
 
-        protected override Argument RunOne(JToken jToken)
+        protected override StdInOut RunOne(JToken jToken)
         {
             // 获取bat文件路径
             string name = jToken.Value<string>("name");
@@ -78,7 +78,7 @@ namespace DeveloperLazyTool.Functions
             //{
             //    // 说明成功了
             if (!_option.Quiet) _logger.Info($"运行 {Enums.FieldNames.scripts}:[{name}] 成功！");
-            return new Argument($"{Enums.FieldNames.script}_{name}", jToken as JObject);
+            return new StdInOut($"{Enums.FieldNames.script}_{name}", jToken as JObject);
             //}
             //else
             //{

@@ -158,6 +158,26 @@ dlt zip-Dlt
 
 聚合功能要求每项有 name 属性，这样，才能给管道中每次成果命名，方便后面的管道使用。如果不设置 name，则命名为空，不能指定参数名来引用。
 
+## 程序架构
+
+### 单一命令
+
+ ```flow
+ console=>start: 开始
+ input=>inputoutput: 命令行输入
+ opt=>operation: 转义成 Option 类
+ stdin=>operation: 转换成标准输入(JObject型)
+ run=>operation: 根据不同的输入，执行不同的操作
+ stdout=>operation: 标准输出（JObject型） 
+ end=>end: 处理结束
+ 
+ console->input->opt->stdin->run->stdout->end
+ ```
+
+### 聚合命令
+
+聚合命令是将输入的参数转换成单一命令的标准输入，然后遍历执行，最后输出结果。
+
 ## ToDo
 
 - [x] 安装 install

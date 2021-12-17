@@ -74,7 +74,7 @@ namespace DeveloperLazyTool.Functions
 
         private ProgressBar _progressBar = null;
 
-        protected override Argument RunOne(JToken jt)
+        protected override StdInOut RunOne(JToken jt)
         {
             // 获取数据
             string name = jt.Value<string>("name");
@@ -149,7 +149,7 @@ namespace DeveloperLazyTool.Functions
             _logger.Info("上传完成");
 
             // 修改参数
-            Argument argument = new Argument($"{Enums.FieldNames.ftp}_{name}", jt as JObject);
+            StdInOut argument = new StdInOut($"{Enums.FieldNames.ftp}_{name}", jt as JObject);
             return argument;
         }
 

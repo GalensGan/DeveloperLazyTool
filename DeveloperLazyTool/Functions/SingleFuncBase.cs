@@ -16,7 +16,7 @@ namespace DeveloperLazyTool.Functions
     {
         private ILog _logger = LogManager.GetLogger(typeof(ArrayFuncBase));
 
-        public override Argument Run()
+        public override StdInOut Run()
         {
             if (!BeforeRuning())
             {

@@ -11,7 +11,7 @@ namespace DeveloperLazyTool.Functions
     class Fn_Uninstall : FuncBase
     {
         private ILog _logger = LogManager.GetLogger(typeof(Fn_Ftp));
-        public override Argument Run()
+        public override StdInOut Run()
         {
             // 删除用户 path 中添加的变量
             string userPath = Environment.GetEnvironmentVariable("path", EnvironmentVariableTarget.User);

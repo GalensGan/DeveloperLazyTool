@@ -23,7 +23,7 @@ namespace DeveloperLazyTool.Functions
 
         protected abstract string GetRuningName();
 
-        public override Argument Run()
+        public override StdInOut Run()
         {
             if (!BeforeRuning())
             {
@@ -68,6 +68,6 @@ namespace DeveloperLazyTool.Functions
             return Option.Argument.Last;
         }
 
-        protected abstract Argument RunOne(JToken jToken);
+        protected abstract StdInOut RunOne(JToken jToken);
     }
 }

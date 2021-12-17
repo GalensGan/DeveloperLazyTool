@@ -12,7 +12,7 @@ namespace DeveloperLazyTool.Functions
     public class Fn_Install : FuncBase
     {
         private ILog _logger = LogManager.GetLogger(typeof(Fn_Ftp));
-        public override Argument Run()
+        public override StdInOut Run()
         {
             // 给用户 path 变量中加上当前目录
             string userPath = Environment.GetEnvironmentVariable("path", EnvironmentVariableTarget.User);

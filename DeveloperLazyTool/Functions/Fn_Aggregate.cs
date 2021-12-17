@@ -30,7 +30,7 @@ namespace DeveloperLazyTool.Functions
             return _option.Name;
         }
 
-        protected override Argument RunOne(JToken jToken)
+        protected override StdInOut RunOne(JToken jToken)
         {
             // 运行模块
             _logger.Info("聚合模块未完成");

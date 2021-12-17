@@ -47,12 +47,9 @@ namespace DeveloperLazyTool
         private static void Run(object obj)
         {
             if (obj is OptionBase options)
-            {
-                // 注入配置文件
-                ArgumentFactory argumentFactory = new ArgumentFactory(options.BaseDir,options.PathData,options.UserConfigName);
-                options.SetArgumentFactory(argumentFactory);
+            {               
                 // 运行命令
-                options.RunFunction();
+                options.StartFunction();
             }
         }
 

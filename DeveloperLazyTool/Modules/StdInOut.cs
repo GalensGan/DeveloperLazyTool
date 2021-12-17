@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using DeveloperLazyTool.Enums;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -11,83 +12,63 @@ using System.Threading.Tasks;
 
 namespace DeveloperLazyTool.Modules
 {
-    public class Argument
+    /// <summary>
+    /// 标准的输入输出
+    /// </summary>
+    public class StdInOut
     {
-        private ILog _logger = LogManager.GetLogger(typeof(Argument));
-
-        private string _name = string.Empty;
-
-        /// <summary>
-        /// 输出结果
-        /// </summary>
-        private JObject _result = null;
-
-        /// <summary>
-        /// 当前数据
-        /// </summary>
-        public JArray InputData { get; private set; }
-
-        /// <summary>
-        /// 所有数据
-        /// </summary>
-        public JObject JObjUser { get; set; }
-
-        public Argument(JArray inputData)
+        public StdInOut(JObject currentConfig,JObject allUserConfigs)
         {
-            InputData = inputData;
-        }
+            CurrentConfig = currentConfig;
+            AllUserConfigs = allUserConfigs;
 
-        public Argument(string argumentNamem, JObject jObject)
-        {
-            _name = argumentNamem;
-            _result = jObject;
+            // 获取name作为stage免
+            _stageName = currentConfig.SelectToken(FieldNames.name.ToString()).ToString();
+
+            // 新建数据储存
+            Data = new JObject();
         }
+        private ILog _logger = LogManager.GetLogger(typeof(StdInOut));
+
+        private string _stageName = string.Empty;
+
+        public JObject AllUserConfigs { get; private set; }
+
+        /// <summary>
+        /// 保存定义命令的原始数据
+        /// </summary>
+        public JObject CurrentConfig { get;private set; }
+
+        /// <summary>
+        /// 保存当前命令产生的结果数据
+        /// </summary>
+        public JObject Data { get; set; }
 
         /// <summary>
         /// 前一个操作的结果
         /// </summary>
-        public Argument Previous { get; set; }
+        public StdInOut Previous { get;private set; }
 
         /// <summary>
         /// 下一个操作的结果
         /// </summary>
-        public Argument Next { get; set; }
+        public StdInOut Next { get;private set; }
 
-        private Argument _currenNextBase = null;
-        private Argument _currenPreviousBase = null;
-        /// <summary>
-        /// 添加
-        /// </summary>
-        /// <param name="argument"></param>
-        public bool AddPrevious(Argument argument)
+        public bool AddPrevious(StdInOut pre)
         {
-            if (argument == null) return false;
+            if (pre == null) return false;
 
-            if (_currenPreviousBase == null) _currenPreviousBase = this;
-            _currenPreviousBase.Previous = argument;
-            _currenPreviousBase = argument;
+            Previous = pre;
 
             return true;
         }
-        public bool AddNext(Argument argument)
+        public bool AddNext(StdInOut next)
         {
-            if (argument == null) return false;
+            if (next == null) return false;
 
-            if (_currenNextBase == null) _currenNextBase = this;
-            // 添加下一个参数
-            _currenNextBase.Next = argument;
-            _currenNextBase = argument;
+            Next = next;
 
             return true;
-        }
-
-        public Argument Last
-        {
-            get
-            {
-                if (_currenNextBase == null) return this;
-                else return _currenNextBase;
-            }
         }
         #region 获取参数值
         public Tuple<bool, T> GetValue<T>(string fieldName)
@@ -98,7 +79,7 @@ namespace DeveloperLazyTool.Modules
                 throw new ArgumentException("参数应以$开头");
             }
 
-            // 判断是否有限定名称,正则判断
+            // 判断是否有限定名称(阶段名.字段名),正则判断
             Regex regex = new Regex(@"^\&[a-zA-Z_]+.");
             if (regex.IsMatch(fieldName))
             {
@@ -116,14 +97,14 @@ namespace DeveloperLazyTool.Modules
             }
         }
 
-        public Tuple<bool, T> GetValue<T>(string argName, string fieldName)
+        public Tuple<bool, T> GetValue<T>(string stageName, string fieldName)
         {
-            if (string.IsNullOrEmpty(argName) || string.IsNullOrEmpty(fieldName))
+            if (string.IsNullOrEmpty(stageName) || string.IsNullOrEmpty(fieldName))
             {
                 throw new ArgumentException("参数为空");
             }
 
-            if (argName == _name)
+            if (stageName == _stageName)
             {
                 return QueryField<T>(fieldName);
             }
@@ -131,7 +112,7 @@ namespace DeveloperLazyTool.Modules
             // 向上查找
             if (Previous != null)
             {
-                return Previous.GetValue<T>(argName, fieldName);
+                return Previous.GetValue<T>(stageName, fieldName);
             }
 
             return new Tuple<bool, T>(false, default);
@@ -145,11 +126,11 @@ namespace DeveloperLazyTool.Modules
         /// <returns></returns>
         private Tuple<bool, T> QueryField<T>(string fieldName)
         {
-            if (_result == null) return new Tuple<bool, T>(false, default);
+            if (Data == null) return new Tuple<bool, T>(false, default);
 
-            if (!_result.ContainsKey(fieldName)) return new Tuple<bool, T>(false, default);
+            if (!Data.ContainsKey(fieldName)) return new Tuple<bool, T>(false, default);
 
-            var value = _result.Value<T>(fieldName);
+            var value = Data.Value<T>(fieldName);
             return new Tuple<bool, T>(true, value);
         }
 
@@ -165,24 +146,21 @@ namespace DeveloperLazyTool.Modules
         /// <param name="fieldValue"></param>
         /// <returns>true 代表新增，false 代表存在，但是更新了值</returns>
         public bool AddField<T>(string fieldName, T fieldValue)
-        {
-            // 如果为空，则初始化 jobject
-            if (_result == null) _result = new JObject();
-
-            // 添加的字段前面都前缀两个下划线 __
+        {           
+            // 添加的字段前面都前缀两个下划线 __，避免与用户定义的字段冲突
             string fieldNameTemp = "__" + fieldName;
 
             // 判断是否重复，如果重复了，就更新，但是返回false
-            if (_result.ContainsKey(fieldNameTemp))
+            if (Data.ContainsKey(fieldNameTemp))
             {
                 // 代表重复了，直接更新值
-                _result.Remove(fieldNameTemp);
-                _result.Add(new JProperty(fieldName, fieldValue));
+                Data.Remove(fieldNameTemp);
+                Data.Add(new JProperty(fieldName, fieldValue));
 
                 return false;
             }
 
-            _result.Add(new JProperty(fieldNameTemp, fieldValue));
+            Data.Add(new JProperty(fieldNameTemp, fieldValue));
             return true;
         }
         #endregion

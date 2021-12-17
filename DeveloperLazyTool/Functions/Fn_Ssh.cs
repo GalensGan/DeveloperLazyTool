@@ -29,7 +29,7 @@ namespace DeveloperLazyTool.Functions
         }
 
         // 仅例子，未完成
-        protected override Argument RunOne(JToken jToken)
+        protected override StdInOut RunOne(JToken jToken)
         {
             using (var sshClient = new SshClient("host", 22, "username", "password"))
 
