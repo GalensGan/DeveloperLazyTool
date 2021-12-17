@@ -67,9 +67,9 @@ namespace DeveloperLazyTool.Functions
             //BackgroundColor = ConsoleColor.DarkGray,
             // BackgroundCharacter = '\u2593',
             DisplayTimeInRealTime = false,
-
-            ProgressCharacter = '─',
-            ProgressBarOnBottom = true
+            EnableTaskBarProgress=true,
+            ProgressCharacter = '=',
+            ProgressBarOnBottom = true,
         };
 
         private ProgressBar _progressBar = null;
