@@ -13,16 +13,17 @@ namespace DeveloperLazyTool.Functions
 {
     /// <summary>
     /// 打开配置文件位置
+    /// 需要传递的参数如下
     /// </summary>
     class Fn_Config : FuncBase
     {
         private Opt_Config _option;
-        public override void SetParams(OptionBase optionBase)
+        public Fn_Config(StdInOut inputConfig) : base(inputConfig)
         {
-            base.SetParams(optionBase);
-
-            _option = ConvertParams<Opt_Config>();
+            // 初始化需要的参数
+            _option = InputParams.CmdOptions as Opt_Config;
         }
+
         public override StdInOut Run()
         {
             if (_option.User)
@@ -40,15 +41,17 @@ namespace DeveloperLazyTool.Functions
             if (_option.ScriptDir)
             {
                 // 打开脚本目录
-                string fileFullName = Path.Combine(Option.BaseDir, Option.PathScript);
+                string fileFullName = Path.Combine(_option.BaseDir, _option.PathScript);
                 Process.Start("explorer.exe", fileFullName);
             }
 
             if (_option.SetupDir)
             {
-                Process.Start("explorer.exe", Option.BaseDir);
+                Process.Start("explorer.exe", _option.BaseDir);
             }
-            return null;
+
+            // 返回成功值
+            return InputParams;
         }
     }
 }

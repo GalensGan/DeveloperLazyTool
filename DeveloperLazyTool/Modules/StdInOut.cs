@@ -1,4 +1,6 @@
 ﻿using DeveloperLazyTool.Enums;
+using DeveloperLazyTool.Extensions;
+using DeveloperLazyTool.Options;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -17,32 +19,42 @@ namespace DeveloperLazyTool.Modules
     /// </summary>
     public class StdInOut
     {
-        public StdInOut(JObject currentConfig,JObject allUserConfigs)
-        {
-            CurrentConfig = currentConfig;
-            AllUserConfigs = allUserConfigs;
+        private string _stageName;
 
-            // 获取name作为stage免
-            _stageName = currentConfig.SelectToken(FieldNames.name.ToString()).ToString();
+        /// <summary>
+        /// 初始化输入
+        /// </summary>
+        /// <param name="cmdOptions"></param>
+        /// <param name="currentConfig"></param>
+        public StdInOut(OptionBase cmdOptions, JObject cmdConfig)
+        {
+            CmdOptions = cmdOptions;
+            CmdConfig = cmdConfig;
+
+            // 获取名称
+            _stageName = CmdConfig.SelectTokenPlus(FieldNames.name, Guid.NewGuid().ToString());
 
             // 新建数据储存
             Data = new JObject();
         }
-        private ILog _logger = LogManager.GetLogger(typeof(StdInOut));
-
-        private string _stageName = string.Empty;
 
         public JObject AllUserConfigs { get; private set; }
 
         /// <summary>
         /// 保存定义命令的原始数据
         /// </summary>
-        public JObject CurrentConfig { get;private set; }
+        public JObject CmdConfig { get;private set; }
+
+        /// <summary>
+        /// 命令行参数
+        /// </summary>
+        public OptionBase CmdOptions { get; private set; }
 
         /// <summary>
         /// 保存当前命令产生的结果数据
         /// </summary>
         public JObject Data { get; set; }
+
 
         /// <summary>
         /// 前一个操作的结果

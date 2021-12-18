@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DeveloperLazyTool.Enums;
 using DeveloperLazyTool.Modules;
 using DeveloperLazyTool.Options;
 using FluentFTP;
@@ -17,48 +18,23 @@ namespace DeveloperLazyTool.Functions
     /// <summary>
     /// 上传文件到 ftp
     /// </summary>
-    public class Fn_Ftp : ArrayFuncBase
+    public class Fn_Ftp : FuncBase
     {
         private Opt_Ftp _option;
         private ILog _logger = LogManager.GetLogger(typeof(Fn_Ftp));
 
-        public override void SetParams(OptionBase optionBase)
-        {
-            base.SetParams(optionBase);
 
-            _option = ConvertParams<Opt_Ftp>();
+        public Fn_Ftp(StdInOut stdInOut):base(stdInOut)
+        {
+            _option = InputParams.CmdOptions as Opt_Ftp;
         }
 
-        protected override bool BeforeRuning()
+        // 运行命令
+        public override StdInOut Run()
         {
-            // 是否要提示
-            if (!_option.Quiet)
-            {
-                string message = null;
-                if (string.IsNullOrEmpty(_option.Name))
-                {
-                    message = "是否运行所有 Ftp 配置(Y/N，Default:Y) ?";
-                }
-                else
-                {
-                    message = $"是否运行 Ftp 配置 {_option.Name}(Y/N，Default:Y) ?";
-                }
-                Console.WriteLine(message);
-                string command = Console.ReadLine();
-                if (!string.IsNullOrEmpty(command) && command.ToLower() != "y")
-                {
-                    _logger.Warn("取消上传");
-                    return false;
-                }
-            }
-
-            return true;
+            return FtpUpload();
         }
 
-        protected override string GetRuningName()
-        {
-            return _option.Name;
-        }
 
         private ProgressBarOptions _options = new ProgressBarOptions
         {
@@ -74,16 +50,17 @@ namespace DeveloperLazyTool.Functions
 
         private ProgressBar _progressBar = null;
 
-        protected override StdInOut RunOne(JToken jt)
+        protected  StdInOut FtpUpload()
         {
+            JObject jobj = InputParams.CmdConfig;
             // 获取数据
-            string name = jt.Value<string>("name");
-            string host = jt.Value<string>("host");
-            int port = jt.Value<int>("port");
-            string username = jt.Value<string>("username");
-            string password = jt.Value<string>("password");
-            string localPath = jt.Value<string>("localPath");
-            string remotePath = jt.Value<string>("remotePath") ?? "/";
+            string name = jobj.Value<string>("name");
+            string host = jobj.Value<string>("host");
+            int port = jobj.Value<int>("port");
+            string username = jobj.Value<string>("username");
+            string password = jobj.Value<string>("password");
+            string localPath = jobj.Value<string>("localPath");
+            string remotePath = jobj.Value<string>("remotePath") ?? "/";
 
             _logger.Info($"开始上传 {name} 任务");
 
@@ -149,8 +126,7 @@ namespace DeveloperLazyTool.Functions
             _logger.Info("上传完成");
 
             // 修改参数
-            StdInOut argument = new StdInOut($"{Enums.FieldNames.ftp}_{name}", jt as JObject);
-            return argument;
+            return InputParams;
         }
 
         private double _lastPercent = 0;

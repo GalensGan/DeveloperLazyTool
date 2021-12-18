@@ -11,25 +11,18 @@ using System.Threading.Tasks;
 
 namespace DeveloperLazyTool.Functions
 {
-    class Fn_Ssh : SingleFuncBase
+    /// <summary>
+    /// 未完成
+    /// </summary>
+    class Fn_Ssh : FuncBase
     {
         private Opt_Ssh _option;
         private ILog _logger = LogManager.GetLogger(typeof(Fn_Script));
 
-        public override void SetParams(OptionBase optionBase)
-        {
-            base.SetParams(optionBase);
-
-            _option = ConvertParams<Opt_Ssh>();
-        }
-
-        protected override string GetRuningName()
-        {
-            return _option.Name;
-        }
+        public Fn_Ssh(StdInOut stdInOut) : base(stdInOut) { }
 
         // 仅例子，未完成
-        protected override StdInOut RunOne(JToken jToken)
+        public override StdInOut Run()
         {
             using (var sshClient = new SshClient("host", 22, "username", "password"))
 
@@ -42,7 +35,7 @@ namespace DeveloperLazyTool.Functions
                 }
             }
 
-            return null;
+            return InputParams;
         }
     }
 }

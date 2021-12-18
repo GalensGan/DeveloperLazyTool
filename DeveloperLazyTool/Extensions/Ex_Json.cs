@@ -9,7 +9,7 @@ namespace DeveloperLazyTool.Extensions
 {
     public static class Ex_Json
     {
-        public static T ValueOrDefault<T>(this JToken jt,string path,T defaultValue)
+        public static T SelectTokenPlus<T>(this JToken jt,string path,T defaultValue)
         {
             var val = jt.SelectToken(path, false);
             if (val!=null) return val.ToObject<T>();

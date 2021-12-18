@@ -13,29 +13,16 @@ namespace DeveloperLazyTool.Functions
     /// <summary>
     /// 执行管道
     /// </summary>
-    class Fn_Aggregate : ArrayFuncBase
+    class Fn_Aggregate : FuncBase
     {
         private Opt_Aggregate _option;
         private ILog _logger = LogManager.GetLogger(typeof(Fn_Aggregate));
 
-        public override void SetParams(OptionBase optionBase)
+        public Fn_Aggregate(StdInOut stdInOut) : base(stdInOut) { }
+        public override StdInOut Run()
         {
-            base.SetParams(optionBase);
-
-            _option = ConvertParams<Opt_Aggregate>();
-        }
-
-        protected override string GetRuningName()
-        {
-            return _option.Name;
-        }
-
-        protected override StdInOut RunOne(JToken jToken)
-        {
-            // 运行模块
-            _logger.Info("聚合模块未完成");
-
-            return null;
+            _logger.Info("聚合模块");
+            return InputParams;
         }
     }
 }

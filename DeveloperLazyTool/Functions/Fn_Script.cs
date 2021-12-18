@@ -1,4 +1,5 @@
-﻿using DeveloperLazyTool.Modules;
+﻿using DeveloperLazyTool.Enums;
+using DeveloperLazyTool.Modules;
 using DeveloperLazyTool.Options;
 using log4net;
 using Newtonsoft.Json.Linq;
@@ -12,20 +13,19 @@ using System.Threading.Tasks;
 
 namespace DeveloperLazyTool.Functions
 {
-    public class Fn_Script : ArrayFuncBase
+    public class Fn_Script : FuncBase
     {
         private Opt_Script _option;
         private ILog _logger = LogManager.GetLogger(typeof(Fn_Script));
 
-        public override void SetParams(OptionBase optionBase)
+        public Fn_Script(StdInOut stdInOut) : base(stdInOut)
         {
-            base.SetParams(optionBase);
-
-            _option = ConvertParams<Opt_Script>();
+            _option = stdInOut.CmdOptions as Opt_Script;
         }
 
-        protected override StdInOut RunOne(JToken jToken)
+        public override StdInOut Run()
         {
+            var jToken = InputParams.CmdConfig;
             // 获取bat文件路径
             string name = jToken.Value<string>("name");
             string fileFullName = jToken.Value<string>("fileName");
@@ -44,7 +44,7 @@ namespace DeveloperLazyTool.Functions
             }
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
-                WorkingDirectory = Path.Combine(Option.BaseDir, Option.PathScript),
+                WorkingDirectory = Path.Combine(_option.BaseDir, _option.PathScript),
                 FileName = fileFullName,
                 Arguments = arguments,
                 UseShellExecute = false,
@@ -78,7 +78,7 @@ namespace DeveloperLazyTool.Functions
             //{
             //    // 说明成功了
             if (!_option.Quiet) _logger.Info($"运行 {Enums.FieldNames.scripts}:[{name}] 成功！");
-            return new StdInOut($"{Enums.FieldNames.script}_{name}", jToken as JObject);
+            return InputParams;
             //}
             //else
             //{
@@ -106,11 +106,6 @@ namespace DeveloperLazyTool.Functions
             bytes = Encoding.Convert(Encoding.Default, Encoding.UTF8, bytes);
             string formatString = Encoding.UTF8.GetString(bytes);
             Console.WriteLine(formatString);
-        }
-
-        protected override string GetRuningName()
-        {
-            return _option.Name;
         }
     }
 }

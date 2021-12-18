@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using DeveloperLazyTool.Modules;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ using System.Threading.Tasks;
 namespace DeveloperLazyTool.Options
 {
     [Verb("list", HelpText = "获取配置名称")]
-    class Opt_List:OptionBase
+    class Opt_List : OptionBase
     {
-        protected override void ResolveArgumenets(ArgumentFactory factory)
+        protected override JArray GetAllCmdConfigs()
         {
-            Argument = factory.GetListArguments();
+            return null;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using DeveloperLazyTool.Enums;
 using DeveloperLazyTool.Functions;
 using DeveloperLazyTool.Modules;
 using log4net;
@@ -15,17 +16,21 @@ namespace DeveloperLazyTool.Options
 {
     public abstract class OptionBase
     {
-        #region 选项
+        #region 所有动词都有的选项
         [Value(0, HelpText = "名称", Required = false)]
         public virtual string Name { get; set; }
+
+        [Option('q', "quiet", HelpText = "是否提示确认", Default = false)]
+        public bool Quiet { get; set; }
         #endregion
+
         private ILog _logger = LogManager.GetLogger(typeof(OptionBase));
 
-        #region 配置变量
+        #region 系统配置变量
         // 系统配置
-        protected JObject SystemConfig  { get;private set; }
+        protected JObject SystemConfig { get; private set; }
 
-        // 用户配置（脚本定义）
+        // 用户配置（脚本定义,整个文件）
         protected JObject UserConfig { get; private set; }
 
         public string SystemConfigPath => "config\\config.json";
@@ -121,13 +126,65 @@ namespace DeveloperLazyTool.Options
                 return;
             }
 
-            FuncBase funcBase = Activator.CreateInstance(type) as FuncBase;
+            // 是否要提示
+            if (!Quiet)
+            {
+                string message;
+                if (string.IsNullOrEmpty(Name))
+                {
+                    message = "是否运行所有配置(Y/N，Default:Y) ?";
+                }
+                else
+                {
+                    message = $"是否运行配置 {Name}(Y/N，Default:Y) ?";
+                }
+                Console.WriteLine(message);
+                string command = Console.ReadLine();
+                if (!string.IsNullOrEmpty(command) && command.ToLower() != "y")
+                {
+                    _logger.Warn("取消上传");
+                    return;
+                }
+            }
 
-            // 获取标准的输入参数
-            funcBase.SetParams(ConvertToStdIn());
+            RunAllCommands(type);
+        }
+
+        protected virtual void RunAllCommands(Type type)
+        {
+            // 找到所有操作
+            JArray jArray = GetAllCmdConfigs();
+            if (jArray == null || jArray.Count < 1)
+            {
+                _logger.Info("当前命令配置为空");
+                return;
+            }
+
             try
             {
-                funcBase.Run();
+                // 获取bat文件路径
+                // 没有传入名称，运行所有的项
+                if (string.IsNullOrEmpty(Name))
+                {
+                    // 调用模块
+                    RunCommands(type, jArray.ToList());
+                }
+                // 如果传入了 name, 则执行特定的项
+                else
+                {
+                    // 找到指定name的配置
+                    var jtokens = jArray.ToList().FindAll(jt => jt.Value<string>("name").ToLower() == Name.ToLower());
+                    if (jtokens != null)
+                    {
+                        // 调用模块
+                        RunCommands(type, jtokens);
+                    }
+                    else
+                    {
+                        // 提示错误
+                        _logger.Error($"未找到{ Name }的配置");
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -135,7 +192,26 @@ namespace DeveloperLazyTool.Options
             }
         }
 
-        // 将当前选项转成标准的输入参数
-        public abstract StdInOut ConvertToStdIn();
+        private void RunCommands(Type type,List<JToken> jTokens)
+        {
+            StdInOut lastStdData = null;
+            // 调用上传模块
+            jTokens.ToList().ForEach(jt =>
+            {
+                // 生成参数
+                var stdIn = new StdInOut(this, jt as JObject);
+                if (lastStdData != null)
+                {
+                    lastStdData.AddNext(stdIn);
+                    lastStdData = stdIn;
+                }
+
+                FuncBase funcBase = Activator.CreateInstance(type, stdIn) as FuncBase;
+                funcBase.Run();
+            });
+        }
+
+
+        protected abstract JArray GetAllCmdConfigs();
     }
 }

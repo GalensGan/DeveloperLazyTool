@@ -1,5 +1,8 @@
 ﻿using CommandLine;
+using DeveloperLazyTool.Enums;
 using DeveloperLazyTool.Functions;
+using DeveloperLazyTool.Modules;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +25,19 @@ namespace DeveloperLazyTool.Options
 
         [Option(HelpText = "打开程序安装目录")]
         public bool SetupDir { get; set; }
+       
+        protected override JArray GetAllCmdConfigs()
+        {
+            // 获取config配置
+            // 系统内部默认，所以返回空配置
+            return null;
+        }
+
+        protected override void RunAllCommands(Type type)
+        {
+            var stdIn = new StdInOut(this, null);
+            FuncBase funcBase = Activator.CreateInstance(type, stdIn) as FuncBase;
+            funcBase.Run();
+        }
     }
 }

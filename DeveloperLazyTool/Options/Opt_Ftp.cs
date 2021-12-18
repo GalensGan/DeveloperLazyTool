@@ -1,4 +1,6 @@
 ﻿using CommandLine;
+using DeveloperLazyTool.Enums;
+using DeveloperLazyTool.Extensions;
 using DeveloperLazyTool.Functions;
 using DeveloperLazyTool.Modules;
 using Newtonsoft.Json.Linq;
@@ -13,15 +15,10 @@ namespace DeveloperLazyTool.Options
     [Verb("ftp", HelpText = "上传文件或者文件夹到ftp")]
     public class Opt_Ftp : OptionBase
     {
-        //[Value(0,HelpText = "上传的配置名称", Required = false)]
-        //public string Name { get; set; }
-
-        [Option('q',"quiet", HelpText = "是否提示确认", Default = false)]
-        public bool Quiet { get; set; }
-
-        protected override void ResolveArgumenets(ArgumentFactory factory)
+        protected override JArray GetAllCmdConfigs()
         {
-            Argument = factory.GetFtpArguments();
+            // 获取用户的ftp配置,传入整个 ftp 配置
+            return UserConfig.SelectTokenPlus(FieldNames.ftps, new JArray());
         }
     }
 }

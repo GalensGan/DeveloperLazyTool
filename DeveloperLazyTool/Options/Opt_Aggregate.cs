@@ -1,5 +1,8 @@
 ﻿using CommandLine;
+using DeveloperLazyTool.Enums;
+using DeveloperLazyTool.Extensions;
 using DeveloperLazyTool.Modules;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +20,9 @@ namespace DeveloperLazyTool.Options
         [Value(0, HelpText = "名称", Required = false)]
         public override string Name { get; set; }
 
-        protected override void ResolveArgumenets(ArgumentFactory factory)
+        protected override JArray GetAllCmdConfigs()
         {
-            Argument = factory.GetNamedArguments(Enums.FieldNames.aggregate.ToString());
+            return UserConfig.SelectTokenPlus(FieldNames.aggregates, new JArray());
         }
     }
 }
