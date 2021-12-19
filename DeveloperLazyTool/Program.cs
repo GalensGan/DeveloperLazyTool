@@ -16,7 +16,7 @@ namespace DeveloperLazyTool
         public static void Main(string[] args)
         {
             // Console.WriteLine(string.Join("__", args));
-            //System.Windows.Forms.MessageBox.Show(string.Join(",", args));
+            System.Windows.Forms.MessageBox.Show(string.Join(",", args));
 
             // args = new string[] { "ftp","dlt" };
             // args = new string[] { "config","u"};

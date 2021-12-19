@@ -18,9 +18,12 @@ namespace DeveloperLazyTool.Enums
         public const string aggregates = "aggregates";
         public const string aggregate = "aggregate";
 
-        public const string isUser = "isUser";
-        public const string isSystem = "isSystem";
-        public const string isScriptDir = "isScriptDir";
-        public const string isSetupDir = "isSetupDir";
+        public const string minios = "minios";
+        public const string endpoint = "endpoint";
+        public const string accessKey = "accessKey";
+        public const string secretKey = "secretKey";
+        public const string region = "region";
+        public const string sessionToken = "sessionToken";  
+        public const string bucket = "bucket";
     }
 }

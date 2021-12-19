@@ -79,5 +79,17 @@
         }
       ]
     }
+  ],
+
+  "minios": [
+    {
+      "name": "upload",
+      "endpoint": "https://obs.uamazing.cn:52443",
+      "accessKey": "user",
+      "secretKey": "26ed66505ff8dbb86dcd5c769ddda595",
+      "region": "",
+      "sessionToken": "",
+      "bucket":"public"
+    }
   ]
 }
