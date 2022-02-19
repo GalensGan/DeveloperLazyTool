@@ -1,7 +1,7 @@
 ﻿using CommandLine;
-using DeveloperLazyTool.Enums;
-using DeveloperLazyTool.Extensions;
-using DeveloperLazyTool.Modules;
+using DeveloperLazyTool.Core.Enums;
+using DeveloperLazyTool.Core.Extensions;
+using DeveloperLazyTool.Core.Modules;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Options
+namespace DeveloperLazyTool.Core.Options
 {
     /// <summary>
     /// 可以将多个操作放在一个管道内，这样实现连续多个操作

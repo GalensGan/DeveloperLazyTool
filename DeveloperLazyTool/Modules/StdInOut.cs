@@ -1,6 +1,6 @@
-﻿using DeveloperLazyTool.Enums;
-using DeveloperLazyTool.Extensions;
-using DeveloperLazyTool.Options;
+﻿using DeveloperLazyTool.Core.Enums;
+using DeveloperLazyTool.Core.Extensions;
+using DeveloperLazyTool.Core.Options;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Modules
+namespace DeveloperLazyTool.Core.Modules
 {
     /// <summary>
     /// 标准的输入输出

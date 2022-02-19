@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Modules
+namespace DeveloperLazyTool.Core.Modules
 {
     class CmdRunner: ScriptRunner
     {

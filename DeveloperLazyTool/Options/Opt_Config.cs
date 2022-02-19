@@ -1,7 +1,7 @@
 ﻿using CommandLine;
-using DeveloperLazyTool.Enums;
-using DeveloperLazyTool.Functions;
-using DeveloperLazyTool.Modules;
+using DeveloperLazyTool.Core.Enums;
+using DeveloperLazyTool.Core.Functions;
+using DeveloperLazyTool.Core.Modules;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Options
+namespace DeveloperLazyTool.Core.Options
 {
     [Verb("config", HelpText = "用默认软件打开配置文件")]
     public class Opt_Config : OptionBase

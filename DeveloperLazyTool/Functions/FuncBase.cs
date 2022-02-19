@@ -1,11 +1,11 @@
-﻿using DeveloperLazyTool.Modules;
+﻿using DeveloperLazyTool.Core.Modules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Functions
+namespace DeveloperLazyTool.Core.Functions
 {
     public abstract class FuncBase
     {

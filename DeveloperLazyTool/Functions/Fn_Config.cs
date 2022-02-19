@@ -1,5 +1,5 @@
-﻿using DeveloperLazyTool.Modules;
-using DeveloperLazyTool.Options;
+﻿using DeveloperLazyTool.Core.Modules;
+using DeveloperLazyTool.Core.Options;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Functions
+namespace DeveloperLazyTool.Core.Functions
 {
     /// <summary>
     /// 打开配置文件位置

@@ -1,7 +1,7 @@
 ﻿using CommandLine;
-using DeveloperLazyTool.Enums;
-using DeveloperLazyTool.Extensions;
-using DeveloperLazyTool.Modules;
+using DeveloperLazyTool.Core.Enums;
+using DeveloperLazyTool.Core.Extensions;
+using DeveloperLazyTool.Core.Modules;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Options
+namespace DeveloperLazyTool.Core.Options
 {
     [Verb("es", true, HelpText = "运行脚本文件(Execute Script)")]
     public class Opt_Script : OptionBase

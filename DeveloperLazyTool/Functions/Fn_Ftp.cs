@@ -5,15 +5,15 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using DeveloperLazyTool.Enums;
-using DeveloperLazyTool.Modules;
-using DeveloperLazyTool.Options;
+using DeveloperLazyTool.Core.Enums;
+using DeveloperLazyTool.Core.Modules;
+using DeveloperLazyTool.Core.Options;
 using FluentFTP;
 using log4net;
 using Newtonsoft.Json.Linq;
 using ShellProgressBar;
 
-namespace DeveloperLazyTool.Functions
+namespace DeveloperLazyTool.Core.Functions
 {
     /// <summary>
     /// 上传文件到 ftp

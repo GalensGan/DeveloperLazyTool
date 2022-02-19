@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Extensions
+namespace DeveloperLazyTool.Core.Extensions
 {
     public static class Ex_Json
     {

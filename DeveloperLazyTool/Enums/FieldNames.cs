@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Enums
+namespace DeveloperLazyTool.Core.Enums
 {
     public class FieldNames
     {
@@ -18,12 +18,16 @@ namespace DeveloperLazyTool.Enums
         public const string aggregates = "aggregates";
         public const string aggregate = "aggregate";
 
-        public const string minios = "minios";
-        public const string endpoint = "endpoint";
-        public const string accessKey = "accessKey";
+        public const string system = "system";
+        public const string pluginConfigName = "pluginConfigName";
+        public const string userConfigName = "userConfigName";
+
         public const string secretKey = "secretKey";
         public const string region = "region";
         public const string sessionToken = "sessionToken";  
         public const string bucket = "bucket";
+
+        public const string plugins = "plugins";
+        public const string enable = "enable";
     }
 }

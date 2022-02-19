@@ -1,8 +1,16 @@
 ﻿{
-   "systemPath": {
-    "data": "data", // data 目录
-    "script": "script", // script 目录
-    "system": "system", // 系统文件目录
-    "userConfigName": "user_config.json"
-  }
+  "system": {
+    "userConfigName": "data/user_config.json", // 该目录的上一级是根目录
+    "pluginConfigName": "config.json" // 该目录的上一级是插件目录
+  },
+  "plugins": [
+    {
+      "name": "System", // 插件所在 plugins 下面的目录
+      "enable": true // 是否开启插件
+    },
+    {
+      "name": "FTP", // 插件所在 plugins 下面的目录
+      "enable": false // 是否开启插件
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 ﻿using CommandLine;
-using DeveloperLazyTool.Modules;
+using DeveloperLazyTool.Core.Modules;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Options
+namespace DeveloperLazyTool.Core.Options
 {
     [Verb("ssh", HelpText = "ssh 连接")]
     class Opt_Ssh : OptionBase

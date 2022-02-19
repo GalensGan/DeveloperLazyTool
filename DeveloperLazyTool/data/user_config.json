@@ -59,7 +59,8 @@
       "name": "uploadDlt",
       "pipeline": [
         {
-          "$script": {
+          "args": "script",
+          "data": {
             "name": "7z-dlt",
             "fileFullName": "7z",
             "arguments": "a -t7z E:/galensShare/Develop/DeveloperLazyTool/DeveloperLazyTool/bin/Release/developer-lazy-tool.7z E:/galensShare/Develop/DeveloperLazyTool/DeveloperLazyTool/bin/Release*",
@@ -67,7 +68,8 @@
           }
         },
         {
-          "$ftp": {
+          "args": "ftp",
+          "data": {
             "name": "ftp-dlt",
             "host": "192.168.23.11",
             "port": 21,

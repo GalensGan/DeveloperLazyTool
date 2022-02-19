@@ -1,5 +1,5 @@
-﻿using DeveloperLazyTool.Modules;
-using DeveloperLazyTool.Options;
+﻿using DeveloperLazyTool.Core.Modules;
+using DeveloperLazyTool.Core.Options;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Functions
+namespace DeveloperLazyTool.Core.Functions
 {
     class Fn_Uninstall : FuncBase
     {
-        private ILog _logger = LogManager.GetLogger(typeof(Fn_Ftp));
+        private ILog _logger = LogManager.GetLogger(typeof(Fn_Uninstall));
 
         private OptionBase _option;
         public Fn_Uninstall(StdInOut stdInOut) : base(stdInOut)

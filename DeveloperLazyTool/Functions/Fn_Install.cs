@@ -1,5 +1,5 @@
-﻿using DeveloperLazyTool.Modules;
-using DeveloperLazyTool.Options;
+﻿using DeveloperLazyTool.Core.Modules;
+using DeveloperLazyTool.Core.Options;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -8,11 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Functions
+namespace DeveloperLazyTool.Core.Functions
 {
     public class Fn_Install : FuncBase
     {
-        private ILog _logger = LogManager.GetLogger(typeof(Fn_Ftp));
+        private ILog _logger = LogManager.GetLogger(typeof(Fn_Install));
         private OptionBase _option;
 
         public Fn_Install(StdInOut stdInOut) : base(stdInOut)

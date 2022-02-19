@@ -1,7 +1,7 @@
-﻿using DeveloperLazyTool.Enums;
-using DeveloperLazyTool.Extensions;
-using DeveloperLazyTool.Modules;
-using DeveloperLazyTool.Options;
+﻿using DeveloperLazyTool.Core.Enums;
+using DeveloperLazyTool.Core.Extensions;
+using DeveloperLazyTool.Core.Modules;
+using DeveloperLazyTool.Core.Options;
 using log4net;
 using Minio;
 using Minio.Exceptions;
@@ -13,7 +13,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Functions
+namespace DeveloperLazyTool.Core.Functions
 {
     class Fn_MinIO : FuncBase
     {

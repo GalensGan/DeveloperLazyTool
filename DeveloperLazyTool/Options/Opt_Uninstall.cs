@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Options
+namespace DeveloperLazyTool.Core.Options
 {
     [Verb("uninstall", HelpText = "卸载程序")]
     class Opt_Uninstall : OptionBase

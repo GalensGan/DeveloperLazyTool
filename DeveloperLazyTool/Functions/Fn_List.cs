@@ -1,6 +1,6 @@
-﻿using DeveloperLazyTool.Enums;
-using DeveloperLazyTool.Modules;
-using DeveloperLazyTool.Options;
+﻿using DeveloperLazyTool.Core.Enums;
+using DeveloperLazyTool.Core.Modules;
+using DeveloperLazyTool.Core.Options;
 using log4net;
 using Newtonsoft.Json.Linq;
 using System;
@@ -9,14 +9,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Functions
+namespace DeveloperLazyTool.Core.Functions
 {
     /// <summary>
     /// 查找某个动词的所有用户配置
     /// </summary>
     class Fn_List : FuncBase
     {
-        private ILog _logger = LogManager.GetLogger(typeof(Fn_Ftp));
+        private ILog _logger = LogManager.GetLogger(typeof(Fn_List));
         private Opt_List _option;
 
         public Fn_List(StdInOut stdInOut) : base(stdInOut)

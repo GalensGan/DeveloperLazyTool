@@ -1,7 +1,7 @@
 ﻿using CommandLine;
-using DeveloperLazyTool.Enums;
-using DeveloperLazyTool.Functions;
-using DeveloperLazyTool.Modules;
+using DeveloperLazyTool.Core.Enums;
+using DeveloperLazyTool.Core.Functions;
+using DeveloperLazyTool.Core.Modules;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Options
+namespace DeveloperLazyTool.Core.Options
 {
     public abstract class OptionBase
     {

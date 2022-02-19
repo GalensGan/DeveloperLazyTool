@@ -1,6 +1,6 @@
 ﻿using CommandLine;
-using DeveloperLazyTool.Enums;
-using DeveloperLazyTool.Extensions;
+using DeveloperLazyTool.Core.Enums;
+using DeveloperLazyTool.Core.Extensions;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeveloperLazyTool.Options
+namespace DeveloperLazyTool.Core.Options
 {
     [Verb("minio", HelpText = "向 MinIO 服务器上传对象")]
     class Opt_MinIO : OptionBase
