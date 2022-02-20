@@ -64,7 +64,8 @@ namespace DLTPlugin.Minio
 
                 Console.WriteLine("上传结果:");
                 var protocol = "http";
-                if (useSSL) protocol = "https";                
+                if (useSSL) protocol = "https";
+
                 foreach (var filePath in FilePaths)
                 {
                     // 生成文件名字
@@ -86,6 +87,11 @@ namespace DLTPlugin.Minio
                     }
 
                     var objectName = Path.Combine(objectDir, Path.GetFileName(fileName)).Replace("\\","/");
+
+                    // 获取预上传的url
+                    //  var uploadUrl = client.PresignedPutObjectAsync(bucketName, objectName, 24 * 60 * 60);
+
+                    // 利用 httpclient 上传
 
                     // 异步当成同步调用
                     client.PutObjectAsync(bucketName, objectName, fileName).Wait();

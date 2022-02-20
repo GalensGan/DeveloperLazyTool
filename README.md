@@ -27,7 +27,7 @@
 ### scoop
 
 ```
-scoop bucket add my-bucket https://gitee.com/noctiflorous/galens-bucket.git
+scoop bucket add my-bucket https://gitee.com/galensgan/galens-bucket.git
 scoop install developer-lazy-tool
 ```
 
@@ -41,52 +41,66 @@ dlt uninstall
 
 然后删除安装目录即可。
 
+### scoop
+
+```
+scoop uninstsall developer-lazy-tool
+```
+
 ## 定位
 
 不重复造轮子，只提供一个聚合方式，使得可以用一条命令完成所有任务。
 
 ## 程序目录
 
-- data
-  存放用户数据
+| 目录名  | 说明             |
+| ------- | ---------------- |
+| data    | 用户数据文件目录 |
+| config  | 系统配置文件     |
+| plugins | 插件目录         |
 
-- config
-  存放系统配置
-  
-- system
+## 程序架构
 
-  系统除配置外的文件
+`developer-lazy-tool` 采用插件式开发，主要三部分组成：
 
-- script
-  所有脚本
+1. 内核程序，命名空间为 `DeveloperLazyTool.Core`
+2. 插件接口，命名空间为 `DeveloperLazyTool.Plugin`
+3. 一系列插件
 
-## 功能
+## 插件
 
-### 安装(install)
+对外提供的所有功能均由插件实现。插件位于 `plugins` 目录下。在用户配置文件中，插件配置对应的配置字段名为 `命令`+`s`。
 
-1. 将程序添加到用户变量中
+例 `plugin` 命令对应的配置字段名为 `plugins`。
 
-### 卸载(uninstall)
+有一些命令不需要配置即可运行。
 
-1. 从用户变量中移除本程序
-2. 提示删除安装目录
+### 系统插件
 
-### 打开配置(config)
+系统插件为 `DLT_Plugins_System.dll`,该插件提供的功能如下：
 
-- 用户配置(--user || -u)
-- 系统配置(--system || -s)
-- 打开脚本目录(--scriptdir)
-- 打开安装目录(--setupdir)
+| 命令      | 作用                   |
+| --------- | ---------------------- |
+| config    | 快速查看配置文件       |
+| explorer  | 快速打开目录或者文件   |
+| install   | 安装本程序（手动安装） |
+| uninstall | 卸载本程序（手动安装） |
+| list      | 查看某个命令的所有配置 |
+| plugin    | 插件管理               |
 
-### FTP上传(ftp)
+### 其它插件
 
-**参数说明：**
+#### FTP 插件
 
-| 参数名         | 作用                                               | 可选 | 默认 |
-| -------------- | -------------------------------------------------- | ---- | ---- |
-| --name \|\| -n | 指定后，上传 name 相应设置中的文件，不区分大小写。 | 是   | 是   |
+该插件只包含一个命令，即 `ftp`，其配置字段名为 `ftps`。
 
-**配置说明：**
+**使用方式:**
+
+```powershell
+dlt ftp <name>
+```
+
+**配置示例:**
 
 ``` json
 "ftps": [
@@ -102,7 +116,60 @@ dlt uninstall
   ]
 ```
 
-### 执行脚本(es)
+**配置说明:**
+
+| 名称       | 说明                         |
+| ---------- | ---------------------------- |
+| name       | 调用时的名称                 |
+| host       | ftp 的 ip 地址               |
+| port       | ftp 端口号，默认 21          |
+| username   | ftp 用户名                   |
+| password   | ftp 密码                     |
+| localPath  | 待上传的本地文件路径         |
+| remotePath | 远程存放目录，`/` 代表根目录 |
+
+#### Minio 插件
+
+该插件只包含一个命令，即 `minio`，其配置字段名为 `minios`。
+
+**使用方式:**
+
+```
+dlt minio <name> -p <path1>[path2,...]
+```
+
+**配置示例:**
+
+``` json
+"minios": [
+    {
+      "name": "img",
+      "endpoint": "yourdomain.com",
+      "accessKey": "user",
+      "secretKey": "xxxx",
+      "region": "",
+      "sessionToken": "",
+      "useSSL": true,
+      "bucketName": "public",
+      "objectDir": "files/images"
+    }
+  ]
+```
+
+**配置说明:**
+
+| 名称                | 说明                |
+| ------------------- | ------------------- |
+| name                | 调用时的名称        |
+| endpoint            | minio 域名，必须    |
+| accessKey           | minio 的 accessKey  |
+| secretKey           | minio 的 secrectKey |
+| region/sessionToken | minio 的配置        |
+| useSSL              | 是否使用 https      |
+| bucketName          | 桶名称              |
+| objectDir           | 对象存储目录        |
+
+#### 执行脚本(es)插件
 
 **动词说明：**
 
@@ -146,37 +213,9 @@ dlt zip-Dlt
   ],
 ```
 
-## 列出配置(list)
-
-**参数说明：**
-
-| 参数名         | 作用                                        | 可选 | 默认 |
-| -------------- | ------------------------------------------- | ---- | ---- |
-| --name \|\| -n | 获取指定名称的配置，比如 `dlt list scripts` | 否   | 是   |
-
-### 聚合
+#### 管道插件
 
 聚合功能要求每项有 name 属性，这样，才能给管道中每次成果命名，方便后面的管道使用。如果不设置 name，则命名为空，不能指定参数名来引用。
-
-## 程序架构
-
-### 单一命令
-
- ```flow
- console=>start: 开始
- input=>inputoutput: 命令行输入
- opt=>operation: 转义成 Option 类
- stdin=>operation: 转换成标准输入(JObject型)
- run=>operation: 根据不同的输入，执行不同的操作
- stdout=>operation: 标准输出（JObject型） 
- end=>end: 处理结束
- 
- console->input->opt->stdin->run->stdout->end
- ```
-
-### 聚合命令
-
-聚合命令是将输入的参数转换成单一命令的标准输入，然后遍历执行，最后输出结果。
 
 ## ToDo
 
@@ -185,5 +224,8 @@ dlt zip-Dlt
 - [x] 打开配置文件
 - [x] ftp上传 ftp
 - [x] 执行脚本 es
-- [ ] 聚合 aggregate
+- [ ] 管道
 - [ ] 更新 update 更新自己
+- [ ] Minio 插件上传添加进度条
+- [ ] 增加类似 `z` 的功能
+- [ ] 美化命令行输出
