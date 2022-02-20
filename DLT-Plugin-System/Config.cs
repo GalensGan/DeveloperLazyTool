@@ -14,7 +14,7 @@ using WowToolAPI.Utils.Extensions;
 namespace DLTPlugins.System
 {
     [Verb("config", HelpText = "用默认软件打开配置文件")]
-    public class Config : PluginBase
+    public class Config : CustomPlugin
     {
         [Option('u',"user",HelpText = "用户配置")]
         public bool User { get; set; }
@@ -31,7 +31,7 @@ namespace DLTPlugins.System
             if (User)
             {
                 // 获取userConfigName
-                var userConfigName = ConfigContainer.SystemSetting.SelectTokenPlus("userConfigName", string.Empty);
+                var userConfigName = ConfigContainer.SystemSetting.SelectTokenPlus("system.userConfigName", string.Empty);
                 string fileFullName = Path.Combine(baseDir, userConfigName);
                 Process.Start(fileFullName);
             }
