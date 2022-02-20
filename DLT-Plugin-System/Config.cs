@@ -25,8 +25,6 @@ namespace DLTPlugins.System
         [Option(HelpText = "打开程序安装目录")]
         public bool SetupDir { get; set; }
 
-        
-
         public override IResult<JToken> RunOneCommand(JObject verbSetting)
         {
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;

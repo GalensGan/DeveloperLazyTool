@@ -11,6 +11,10 @@
     {
       "name": "FTP", // 插件所在 plugins 下面的目录
       "enable": false // 是否开启插件
+    },
+    {
+      "name": "Minio", // 插件所在 plugins 下面的目录
+      "enable": true // 是否开启插件
     }
   ]
 }

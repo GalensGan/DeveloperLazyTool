@@ -27,8 +27,8 @@ namespace DeveloperLazyTool.Core
             // args = new string[] { "list", "ftps" };
             // args = new string[] { "es", "ipecversion" };
             // args = new string[] { "es","addmac", "-b" };
-
             // args = new string[] { "plugin","add", "-n","FTP","-p", "DLT-Plugins-FTP.dll" };
+            // args = new string[] { "minio", "img", "-p", "Minio.dll" };
 
             var plugin = PluginFactory.Instance.GetPlugin(args);
             plugin?.StartCommand();

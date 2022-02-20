@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DLT-Plugin-Script", "DLT-Pl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DLT-Plugins-Pipeline", "DLT-Plugins-Pipeline\DLT-Plugins-Pipeline.csproj", "{701B4419-27B0-4DEB-8DDD-BE33777C2A4E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DLT-Plugin-Minio", "DLT-Plugin-Minio\DLT-Plugin-Minio.csproj", "{D48F71D8-B615-4163-B0C0-3A278DC4B2D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{701B4419-27B0-4DEB-8DDD-BE33777C2A4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{701B4419-27B0-4DEB-8DDD-BE33777C2A4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{701B4419-27B0-4DEB-8DDD-BE33777C2A4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D48F71D8-B615-4163-B0C0-3A278DC4B2D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D48F71D8-B615-4163-B0C0-3A278DC4B2D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D48F71D8-B615-4163-B0C0-3A278DC4B2D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D48F71D8-B615-4163-B0C0-3A278DC4B2D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +62,7 @@ Global
 		{9140BE72-9F44-467E-8E0F-E898C28627A1} = {54DD8620-C7EB-4CBB-B8DA-CCD4AFCAE03D}
 		{100A237C-FE33-46EF-A482-E79011059D57} = {54DD8620-C7EB-4CBB-B8DA-CCD4AFCAE03D}
 		{701B4419-27B0-4DEB-8DDD-BE33777C2A4E} = {54DD8620-C7EB-4CBB-B8DA-CCD4AFCAE03D}
+		{D48F71D8-B615-4163-B0C0-3A278DC4B2D8} = {54DD8620-C7EB-4CBB-B8DA-CCD4AFCAE03D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8F986BC8-3391-4B52-B16F-A3118E73EEEB}
