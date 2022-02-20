@@ -87,7 +87,7 @@ namespace DLTPlugins.System
 
             var pluginSettingsArr = ConfigContainer.SystemSetting.SelectTokenPlus("plugins", new JArray());
             // 判断插件名是否重复
-            var existConfig = pluginSettingsArr.Where(jt => jt.Value<string>("name").ToString() == Name.ToUpper()).FirstOrDefault();
+            var existConfig = pluginSettingsArr.Where(jt => jt.Value<string>("name").ToString().ToLower() == Name.ToLower()).FirstOrDefault();
             if (existConfig != null)
             {
                 Console.WriteLine($"{Name} 插件已经存在，是否覆盖？(Y/N，default:Y)");
@@ -123,7 +123,7 @@ namespace DLTPlugins.System
             //var testDir = Environment.CurrentDirectory;
 
             // 生成目录
-            var pluginDir = Path.Combine(baseDir, "plugins", Name.ToUpper());
+            var pluginDir = Path.Combine(baseDir, "plugins", Name);
             Directory.CreateDirectory(pluginDir);
             File.Copy(dllFileFullName, Path.Combine(pluginDir, Path.GetFileName(dllFileFullName)), true);
 
@@ -138,7 +138,7 @@ namespace DLTPlugins.System
             {
                 pluginSettingsArr.Add(new JObject()
                 {
-                    { "name", Name.ToUpper() },
+                    { "name", Name },
                     {
                         "enable",IsEnable
                     }
@@ -171,7 +171,7 @@ namespace DLTPlugins.System
 
             var pluginSettingsArr = ConfigContainer.SystemSetting.SelectTokenPlus("plugins", new JArray());
             // 判断插件名是否重复
-            var existConfig = pluginSettingsArr.Where(jt => jt.Value<string>("name").ToString() == Name.ToUpper()).FirstOrDefault();
+            var existConfig = pluginSettingsArr.Where(jt => jt.Value<string>("name").ToString() == Name).FirstOrDefault();
             if (existConfig == null)
             {
                 // 插件不存在
@@ -208,7 +208,7 @@ namespace DLTPlugins.System
 
             var pluginSettingsArr = ConfigContainer.SystemSetting.SelectTokenPlus("plugins", new JArray());
             // 判断插件名是否重复
-            var existConfig = pluginSettingsArr.Where(jt => jt.Value<string>("name").ToString() == Name.ToUpper()).FirstOrDefault();
+            var existConfig = pluginSettingsArr.Where(jt => jt.Value<string>("name").ToString() == Name).FirstOrDefault();
             if (existConfig == null)
             {
                 // 插件不存在
