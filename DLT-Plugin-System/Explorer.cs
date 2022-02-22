@@ -28,7 +28,7 @@ namespace DLTPlugins.System
         {
             // 如果没有 Name 或者 path 为空，则只打开当前目录
             // 如果没有 path，则打开当前，然后返回
-            if (Paths == null || string.IsNullOrEmpty(Name) || Paths.Count() < 1)
+            if ((Paths == null || Paths.Count() < 1) && string.IsNullOrEmpty(Name))
             {
                 var baseDir = Environment.CurrentDirectory;
                 if (Directory.Exists(baseDir))
@@ -49,11 +49,13 @@ namespace DLTPlugins.System
 
         private IResult<JToken> OpenByName()
         {
+            if (string.IsNullOrEmpty(Name)) return new ErrorResult("没有输入 Name");
+
             // 查找Name配置
             if (!(ConfigContainer.VerbSetting is JArray configs)) return new ErrorResult("命令配置不存在");
 
             // 获取Name对应的配置
-            var nameConfig = configs.Where(jt=>jt.Value<string>("name").ToLower()==Name.ToLower()).FirstOrDefault();
+            var nameConfig = configs.Where(jt => jt.Value<string>("name").ToLower() == Name.ToLower()).FirstOrDefault();
             if (nameConfig == null)
             {
                 var message = $"未在 ess 中找到 {Name} 对应的配置";
@@ -62,14 +64,14 @@ namespace DLTPlugins.System
             }
 
             var paths = nameConfig.SelectToken("paths") as JArray;
-            if(paths==null || paths.Count() < 1)
+            if (paths == null || paths.Count() < 1)
             {
                 var message = $"未找到 paths 字段，应为数组";
                 _logger.Error(message);
                 return new ErrorResult(message);
             }
 
-            foreach(var pathJt in paths)
+            foreach (var pathJt in paths)
             {
                 // 判断是否存在
                 var path = pathJt.ToString();
@@ -92,6 +94,8 @@ namespace DLTPlugins.System
 
         private IResult<JToken> OpenByPath()
         {
+            if (Paths == null) return new ErrorResult("没有传递 path");
+
             // 获取目录
             var baseDir = Environment.CurrentDirectory;
 
