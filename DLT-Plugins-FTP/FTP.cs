@@ -110,14 +110,10 @@ namespace DLTPlugins.FTP
 
         private ProgressBarOptions _options = new ProgressBarOptions
         {
-            //ForegroundColor = ConsoleColor.Yellow,
-            //ForegroundColorDone = ConsoleColor.DarkGreen,
-            //BackgroundColor = ConsoleColor.DarkGray,
-            // BackgroundCharacter = '\u2593',
-            DisplayTimeInRealTime = false,
-            EnableTaskBarProgress = true,
             ProgressCharacter = '=',
             ProgressBarOnBottom = true,
+            DisplayTimeInRealTime = false,
+            MessageEncodingName = "utf-8"
         };
 
         private ProgressBar _progressBar = null;

@@ -115,16 +115,26 @@ namespace DeveloperLazyTool.Core.Plugin
         private Dictionary<Type, JToken> _pluginSettingsDic = new Dictionary<Type, JToken>();
         private void LoadPlugins()
         {
+            // 提前加载通用类库
+            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            List<string> globalAssemblies = new List<string>() { "CommandLine.dll", "ShellProgressBar.dll" }
+                .ConvertAll(p => Path.Combine(baseDir, p));
+            // 避免被插件加载
+            foreach (var globalDll in globalAssemblies) Assembly.LoadFrom(globalDll);
+
             // 获取插件配置
             JArray plugins = _systemConfig.SelectTokenPlus(FieldNames.plugins, new JArray());
 
             var enables = plugins.ToList().Where(t => t.SelectTokenPlus(FieldNames.enable, false)).ToList();
 
             if (enables.Count == 0) return;
-            // 获取目录
-            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+
+            // 获取目录           
             var pluginsDir = Path.Combine(baseDir, FieldNames.plugins);
             var pluginConfigName = _systemConfig.SelectTokenPlus($"{FieldNames.system}.{FieldNames.pluginConfigName}", string.Empty);
+
+            // 添加插件目录到环境变量中
+            var pathEnv = Environment.GetEnvironmentVariable("Path");
 
             foreach (var plugin in enables)
             {
@@ -133,12 +143,17 @@ namespace DeveloperLazyTool.Core.Plugin
 
                 // 组装插件目录
                 var pluginDir = Path.Combine(pluginsDir, pluginName);
+                // 添加目录到环境字符串中
+                pathEnv += $";{pluginDir}";
 
                 var dirInfo = new DirectoryInfo(pluginDir);
                 if (!dirInfo.Exists) continue;
 
                 // 获取所有的 dll 文件
                 var dllFiles = dirInfo.GetFiles("*.dll", SearchOption.AllDirectories);
+                // 过滤掉已经加载了的程序集
+                var assNames = AppDomain.CurrentDomain.GetAssemblies().ToList().ConvertAll(s => s.GetName().Name);
+                dllFiles = dllFiles.Where(f => !assNames.Contains(f.Name.Replace(f.Extension, ""))).ToArray();
 
                 // 读取配置
                 JToken pluginConfig = new JObject();
@@ -159,6 +174,8 @@ namespace DeveloperLazyTool.Core.Plugin
                 {
                     try
                     {
+                        // LoadFrom 会加载依赖
+                        // LoadFile 仅加载当前文件
                         Assembly pluginAssembly = Assembly.LoadFrom(dllFile.FullName);
 
                         // 根据 dll 中的 type，保存配置
@@ -182,11 +199,13 @@ namespace DeveloperLazyTool.Core.Plugin
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error(ex);
+                        // _logger.Error(ex);
                         continue;
                     }
                 }
             }
+
+            Environment.SetEnvironmentVariable("Path", pathEnv);
         }
 
         // 获取当前系统的 type
@@ -222,7 +241,7 @@ namespace DeveloperLazyTool.Core.Plugin
 
         // 错误处理
         private void HandleParseError(IEnumerable<Error> errs)
-        {            
+        {
             //if (errs.IsVersion())
             //{
             //    _logger.Error("Version Request");

@@ -31,8 +31,10 @@ namespace DeveloperLazyTool.Plugin
         public JToken PluginSetting { get; private set; }
         /// <summary>
         /// 当前命令设置
+        /// 该值一般是一个数组
         /// </summary>
         public JToken VerbSetting { get; private set; }
+
         /// <summary>
         /// 所有命令设置
         /// </summary>

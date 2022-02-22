@@ -40,7 +40,7 @@ namespace DLTPlugins.System
         /// 文件路径
         /// </summary>
         [Option('p', "path", HelpText = "插件库文件路径")]
-        public string DllPath { get; set; }
+        public IEnumerable<string> DllPaths { get; set; }
 
         [Option('e', "enable", HelpText = "是否启用插件", Default = true)]
         public bool IsEnable { get; set; }
@@ -98,25 +98,18 @@ namespace DLTPlugins.System
                 }
             }
 
+            // 判断所有文件是否都存在
+            List<string> dllFullPaths = DllPaths.ToList().ConvertAll(p => Path.Combine(Environment.CurrentDirectory, p));
             // 判断是否有path
-            if (string.IsNullOrEmpty(DllPath))
+            if (dllFullPaths.Any(p=>!File.Exists(p)))
             {
-                var message = "路径为空";
+                var message = "可能某些文件不存在";
                 _logger.Error(message);
                 return new ErrorResult(message);
             }
 
             // 将文件复制到指定位置
             var baseDir = AppDomain.CurrentDomain.BaseDirectory;
-            var workDir = Environment.CurrentDirectory;
-            var dllFileFullName = Path.Combine(workDir, DllPath);
-            // 判断文件是否存在
-            if (!File.Exists(dllFileFullName))
-            {
-                var message = "文件不存在";
-                _logger.Error(message);
-                return new ErrorResult(message);
-            }
 
             // 将文件复制到指定位置
             //var baseDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -125,7 +118,10 @@ namespace DLTPlugins.System
             // 生成目录
             var pluginDir = Path.Combine(baseDir, "plugins", Name);
             Directory.CreateDirectory(pluginDir);
-            File.Copy(dllFileFullName, Path.Combine(pluginDir, Path.GetFileName(dllFileFullName)), true);
+            foreach (var dllFullPath in dllFullPaths)
+            {
+                File.Copy(dllFullPath, Path.Combine(pluginDir, Path.GetFileName(dllFullPath)), true);
+            }
 
             // 向配置文件中添加信息
             // 如果存在，就更新设置
