@@ -25,7 +25,7 @@ namespace DeveloperLazyTool.Core
             // args = new string[] { "cd-backend", "-q", "true", };
             // args = new string[] { "agg", "uploadDlt" };
             // args = new string[] { "list", "ftps" };
-            args = new string[] { "es", "testenv" };
+            // args = new string[] { "es", "testenv" };
             // args = new string[] { "es","addmac", "-b" };
             // args = new string[] { "plugin","add", "-n","FTP","-p", "DLT-Plugins-FTP.dll" };
             // args = new string[] { "minio", "img", "-p", "ToDesk_Lite.exe" };
