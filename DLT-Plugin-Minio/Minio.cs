@@ -120,16 +120,15 @@ namespace DLTPlugin.Minio
                         // 获取预上传的url
                         var uploadUrl = client.PresignedPutObjectAsync(bucketName, objectName, 24 * 60 * 60).GetAwaiter().GetResult();
 
-                        using (MultipartFormDataContent multipartFormData = new MultipartFormDataContent())
+
+                        var sc = new StreamContent(fileInfo.OpenRead());
+                        HttpResponseMessage resMessage = httpClient.PutAsync(uploadUrl, sc).GetAwaiter().GetResult();
+                        if (!resMessage.IsSuccessStatusCode)
                         {
-                            multipartFormData.Add(new StreamContent(fileInfo.OpenRead()), "file", fileInfo.Name);
-                            HttpResponseMessage resMessage = httpClient.PutAsync(uploadUrl, multipartFormData).GetAwaiter().GetResult();
-                            if (!resMessage.IsSuccessStatusCode)
-                            {
-                                resultUrls.Add(resMessage.ReasonPhrase);
-                                continue;
-                            }
+                            resultUrls.Add(resMessage.ReasonPhrase);
+                            continue;
                         }
+
 
                         // 异步当成同步调用
                         // client.PutObjectAsync(bucketName, objectName, fileName).Wait();
