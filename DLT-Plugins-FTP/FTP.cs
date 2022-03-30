@@ -73,7 +73,7 @@ namespace DLTPlugins.FTP
                     RetryAttempts = 3,
                     // specify the login credentials, unless you want to use the "anonymous" user account
                     Credentials = new NetworkCredential(username, password),
-                    Port = port,
+                    Port = port,                    
                     Encoding = Encoding.UTF8,
                 })
                 {
@@ -99,8 +99,6 @@ namespace DLTPlugins.FTP
                     _progressBar.AsProgress<double>().Report(1);
                     _progressBar = null;
                 }
-
-
             }
             _logger.Info("上传完成");
 
