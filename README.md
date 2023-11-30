@@ -61,7 +61,7 @@ scoop uninstsall developer-lazy-tool
 
 ## 程序架构
 
-`developer-lazy-tool` 采用插件式开发，主要三部分组成：
+`developer-lazy-tool` 采用插件式开发，主要由三部分组成：
 
 1. 内核程序，命名空间为 `DeveloperLazyTool.Core`
 2. 插件接口，命名空间为 `DeveloperLazyTool.Plugin`

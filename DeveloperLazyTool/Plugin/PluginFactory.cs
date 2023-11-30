@@ -197,7 +197,7 @@ namespace DeveloperLazyTool.Core.Plugin
                             _pluginSettingsDic.Add(type, pluginConfig);
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         // _logger.Error(ex);
                         continue;
